@@ -1,0 +1,81 @@
+/* Site Wide Super-CSS
+
+This CSS sheet supersedes other CSS sheets
+use it to customise certain settings that will be applied accross the web-site,
+they override any other CSS settings (Bootstrap/other) - we use !important.
+
+We have in place the following adjusted settings:
+// white space
+- increase white space (line height) of sentences that carry over two or more lines in <p></p> tags
+- increase white space (line height) between list elements <li><ul></ul></li>
+- increase white space after a heading (1-6)
+
+// links
+- we set colors for unvisited, visited, mouse-over and selected links
+-------------------------------------------------- */
+
+/** white spacing of sentences that carry over two or more lines within a paragraph */
+p {
+    line-height: 2em !important;
+}
+
+/** white spacing of list items */
+li, ul {
+    line-height: 2em !important;
+}
+
+h1 {
+    line-height: 2.3em !important;
+}
+
+h2 {
+    line-height: 2.3em !important;
+}
+
+h3 {
+    line-height: 2.3em !important;
+}
+
+h4 {
+    line-height: 2.3em !important;
+}
+
+h5 {
+    line-height: 2.3em !important;
+}
+
+h6 {
+    line-height: 2.3em !important;
+}
+
+.modal-backdrop {
+    /* bug fix for chat application Converse.js - no overlay
+     * otherwise the 'add-contact' dialog sits behind other element(s)
+     * and we cannot enter anything
+     */
+    display: none !important;
+}
+
+/* we give all 'states' of <a href> the same color for now
+we set it equal to const TXTCOLOR_ACTIVE_NAV (see Config.php)
+which sets the color of the active nav button.
+*/
+/* unvisited link */
+a:link {
+    color: #FFC000;
+}
+
+/* visited link */
+a:visited {
+    color: #FFC000;
+}
+
+/* mouse over link */
+a:hover {
+    color: #FFC000;
+}
+
+/* selected link */
+a:active {
+    color: #FFC000;
+}

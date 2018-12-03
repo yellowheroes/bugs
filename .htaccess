@@ -1,0 +1,35 @@
+#Per-directory Rewrites
+#    The rewrite engine may be used in .htaccess files and in <Directory> sections, with some additional complexity.
+#    To enable the rewrite engine in this context, you need to set "RewriteEngine On" and "Options FollowSymLinks" must be enabled. If your administrator has disabled override of FollowSymLinks for a user's directory, then you cannot use the rewrite engine. This restriction is required for security reasons.
+#    See the RewriteBase directive for more information regarding what prefix will be added back to relative substitutions.
+#    If you wish to match against the full URL-path in a per-directory (htaccess) RewriteRule, use the %{REQUEST_URI} variable in a RewriteCond.
+#    The removed prefix always ends with a slash, meaning the matching occurs against a string which never has a leading slash. Therefore, a Pattern with ^/ never matches in per-directory context.
+#    Although rewrite rules are syntactically permitted in <Location> and <Files> sections (including their regular expression counterparts), this should never be necessary and is unsupported. A likely feature to break in these contexts is relative substitutions.
+
+
+
+#Multiviews: browser can request e.g. index or index.php, either works
+Options -Multiviews
+Options FollowSymLinks
+
+RewriteEngine On
+
+# RewriteBase - gets prepended to rewritten URL
+# PRODUCTION environment
+#RewriteBase /
+# DEVELOPMENT environment
+RewriteBase /edsa-coding/projects/templates/base0/
+
+#RewriteConditions - i.e. do not rewrite URL
+#if requested URL path is an existing file, a directory or a dynamic link
+RewriteCond %{REQUEST_FILE} !-f
+RewriteCond %{REQUEST_FILE} !-d
+RewriteCond %{REQUEST_FILE} !-l
+
+# IMPORTANT rewrite condition for anything that needs to access *./src/system/.* folders, URL will NOT be rewritten
+# condition: if pattern .*/src/system/.* is not (!) part of REQUEST_URI then rewrite, otherwise do NOT rewrite
+# i.e. only our routes need rewriting to 'src/app/index.php?url='
+RewriteCond %{REQUEST_URI} !^.*/src/system/.*$ [NC]
+RewriteRule ^(.+)$ src/app/index.php?url=$1 [QSA,L]
+# PRODUCTION environment: projectname === the folder on web-host where the application sits
+#RewriteRule ^(.+)$ projectname/src/app/index.php?url=$1 [QSA,L]

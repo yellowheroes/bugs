@@ -1,0 +1,37 @@
+{
+  "name": "yellowheroes/base0",
+  "version": "1.0.0",
+  "type": "library",
+  "description": "basic mvc project template",
+  "keywords": [
+    "template",
+    "project",
+    ""
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Yellow Heroes",
+      "email": "admin@yellowheroes.com"
+    }
+  ],
+  "_comment": [
+    {
+      "remark1": "projectname in development",
+      "remark2": "no error / exception handling",
+      "remark3": "unstable",
+      "remark4": "uses Flintstone for flat-file database transactions"
+    }
+  ],
+  "require": {
+    "fire015/flintstone": "2.*"
+  },
+  "config": {
+    "optimize-autoloader": false
+  },
+  "autoload": {
+    "psr-4": {
+      "yellowheroes\\projectname\\": "src/"
+    }
+  }
+}

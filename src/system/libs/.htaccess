@@ -1,0 +1,7 @@
+# use 'Require all denied'
+# http://httpd.apache.org/docs/current/en/mod/mod_authz_core.html#require
+# The web server, and therefore any server side language,
+# will still be able to read the files in this directory
+# because the directory's local permissions allow the web server to read and execute the files.
+Options -Indexes
+Require all denied
