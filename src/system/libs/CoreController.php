@@ -1,5 +1,5 @@
 <?php
-namespace yellowheroes\projectname\system\libs;
+namespace yellowheroes\jimmy\system\libs;
 
 class CoreController
 {

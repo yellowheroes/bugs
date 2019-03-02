@@ -1,9 +1,9 @@
 <?php
-namespace yellowheroes\projectname\system\mvc\views;
+namespace yellowheroes\jimmy\system\mvc\views;
 
-use yellowheroes\projectname\system\config as config;
-use yellowheroes\projectname\system\mvc\models as models;
-use yellowheroes\projectname\system\libs as libs;
+use yellowheroes\jimmy\system\config as config;
+use yellowheroes\jimmy\system\mvc\models as models;
+use yellowheroes\jimmy\system\libs as libs;
 
 /**
  * check if user is logged-in and has appropriate (admin) priviliges
@@ -28,7 +28,7 @@ if ($userType !== 'admin') {
  */
 $msg = 'Delete a Blog Archive';
 echo "<div class='row' style='margin-left: -15px; font-size: 1.5em;'>";
-echo $bootWrap->alert('primary', $msg, false, false); // alert is not dismissable, it's a title/header in this case
+echo $bootWrap->alert($msg, 'primary', false, null); // alert is not dismissable, it's a title/header in this case
 echo "</div>";
 
 /**
@@ -52,19 +52,19 @@ $inputFields = [
     ['select', 'blogname', 'blogname', "", '', 'Blog name', $blogNames]
 ];
 //$confirmationDialog[true, false] means we want a confirmationDialog(true) and a button (false) - if want a href text, set second bool to true as well.
-$form = $bootWrap->form($inputFields, 'delete', $method = 'POST', $action = "#", $formId = "formId", $backHref = false, $confirmationDialog = [true, false]); // we substitute the 'submit' button with a BootWrap::confirmationDialog() button
+$form = $bootWrap->form($inputFields, 'delete', $method = 'POST', $action = "#", $formId = "formId", $backHref = false,  $backDisplay = 'Back', $confirmationDialog = [true, false]); // we substitute the 'submit' button with a BootWrap::confirmationDialog() button
 echo $form;
 
-// the submit button 'name'-field of the confirmation dialog is 'confirm'
+// the submit button 'name'-field of the confirmation dialog is 'confirm' by default
 if (isset($_POST['confirm'])) {
         $deleteBlog = $model->deleteArchive($_POST['blogname']); // BlogModel::deleteArchive()
         if ($deleteBlog !== false) {
             $msg = "Successfully deleted blog!";
-            $alert = $bootWrap->alert('success', $msg);
+            $alert = $bootWrap->alert($msg, 'success');
             echo $alert;
         } elseif ($deleteBlog === false) {
             $msg = "We could not delete the blog archive, please try again...";
-            $alert = $bootWrap->alert('warning', $msg);
+            $alert = $bootWrap->alert($msg, 'warning');
             echo $alert;
         }
 }

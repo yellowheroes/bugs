@@ -1,9 +1,9 @@
 <?php
-namespace yellowheroes\projectname\system\mvc\views;
+namespace yellowheroes\jimmy\system\mvc\views;
 
-use yellowheroes\projectname\system\config as config;
-use yellowheroes\projectname\system\mvc\models as models;
-use yellowheroes\projectname\system\libs as libs;
+use yellowheroes\jimmy\system\config as config;
+use yellowheroes\jimmy\system\mvc\models as models;
+use yellowheroes\jimmy\system\libs as libs;
 
 /**
  * check if user is logged-in and has appropriate (admin) priviliges
@@ -26,7 +26,7 @@ if ($userType !== 'admin') {
  */
 $msg = 'Create a New Blog Archive';
 echo "<div class='row' style='margin-left: -15px; font-size: 1.5em;'>";
-echo $bootWrap->alert('primary', $msg, false, false); // alert is not dismissable, it's a title/header in this case
+echo $bootWrap->alert($msg, 'primary', false, null); // alert is not dismissable, it's a title/header in this case
 echo "</div>";
 
 /**
@@ -53,11 +53,11 @@ if (isset($_POST['submit'])) {
     $createBlog = (new models\BlogModel())->createArchive($_POST['blogname'], $_POST['blogtype']);
     if ($createBlog !== false) {
         $msg = "Successfully created your new blog!";
-        $alert = (new libs\BootWrap())->alert('success', $msg);
+        $alert = (new libs\BootWrap())->alert($msg, 'success');
         echo $alert;
     } elseif ($createBlog === false) {
         $msg = "That blog already exists, please try again...";
-        $alert = (new libs\BootWrap())->alert('warning', $msg);
+        $alert = (new libs\BootWrap())->alert($msg, 'warning');
         echo $alert;
     }
 }

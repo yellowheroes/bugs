@@ -1,7 +1,7 @@
 <?php
-namespace yellowheroes\projectname\system\libs;
+namespace yellowheroes\jimmy\system\libs;
 
-use yellowheroes\projectname\system\config as config;
+use yellowheroes\jimmy\system\config as config;
 
 class Router
 {
@@ -20,9 +20,7 @@ class Router
 
     // methods
     public function __construct()
-    {
-        $this->config = new config\Config(); // access to $this->config::PROJECTNAME
-
+    {     
         if (isset($_GET['url'])) {
             $this->parseUrl();
         }
@@ -44,21 +42,19 @@ class Router
             // e.g. user sets index.php, we turn it into index - so we can instantiate the Controller - e.g. new Index();
             $strip = pathinfo($url[0]);
             $url[0] = $strip['filename'];
-            $projectName = '';
+           
             // dirname(__DIR__) === D:\Users\Robert\Documents\z_other\coding\MVC\MVC_Base_v50\src\system
             if (file_exists(dirname(__DIR__) . '/mvc/controllers/' . ucfirst($url[0]) . '.php')) {
                 $this->logController = ucfirst($url[0]); // store controller for ROUTES_LOG file
                 // namespace: we cannot use the namespace alias... not clear why
                 // so we use the full namespace path to be able to instantiate the 'controllers' class
-                $projectName = ($this->config::PROJECTNAME !== '') ? $this->config::PROJECTNAME : $this->config::APPFOLDER;
-                $this->controller = 'yellowheroes\\' . $projectName . '\\system\\mvc\\controllers\\' . ucfirst($url[0]);
+                $this->controller = 'yellowheroes\\jimmy\\system\\mvc\\controllers\\' . ucfirst($url[0]);
                 unset($url[0]);
                 // instantiate controller
                 $this->controller = new $this->controller;
             } else { // use default controller - class 'Index.php'
                 $this->logController = $this->controller; // store controller for ROUTES_LOG file
-                $projectName = ($this->config::PROJECTNAME !== '') ? $this->config::PROJECTNAME : $this->config::APPFOLDER;
-                $this->controller = 'yellowheroes\\' . $projectName . '\\system\\mvc\\controllers\\' . $this->controller;
+                $this->controller = 'yellowheroes\\jimmy\\system\\mvc\\controllers\\' . $this->controller;
                 $this->controller = new $this->controller;
                 unset($url[0]); // a controller is set, but doesn't exist - destroy $url[0]
             }
@@ -92,9 +88,11 @@ class Router
         // clear $_GET array
         unset($_GET);
 
-        // write route to log file
-        $this->logRoute();
-               
+        // write route to log file (LOGROUTES in Config.php defaults to false)
+        if(config\Config::LOGROUTES) {
+            $this->logRoute();
+        }
+        
          /**
          * INVOKE ACTION
          */

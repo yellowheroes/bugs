@@ -1,8 +1,8 @@
 <?php
-namespace yellowheroes\projectname\system\mvc\views;
+namespace yellowheroes\jimmy\system\mvc\views;
 
-use yellowheroes\projectname\system\config as config;
-use yellowheroes\projectname\system\libs as libs;
+use yellowheroes\jimmy\system\config as config;
+use yellowheroes\jimmy\system\libs as libs;
 
 /**
  * check if user is logged-in and has appropriate (admin) priviliges
@@ -27,7 +27,7 @@ if ($userType !== 'admin') {
  */
 $msg = 'Dashboard';
 echo "<div class='row' style='margin-left: -15px; font-size: 1.5em;'>";
-echo $bootWrap->alert('primary', $msg, false, false); // dismiss==false - alert is not dismissable, it's a header in this case
+echo $bootWrap->alert($msg, 'primary', false, null); // dismiss==false - alert is not dismissable, it's a header in this case
 echo "</div>";
 
 /**

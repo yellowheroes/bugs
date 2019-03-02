@@ -1,9 +1,9 @@
 <?php
-namespace yellowheroes\projectname\system\mvc\views;
+namespace yellowheroes\jimmy\system\mvc\views;
 
-use yellowheroes\projectname\system\config as config;
-use yellowheroes\projectname\system\mvc\models as models;
-use yellowheroes\projectname\system\libs as libs;
+use yellowheroes\jimmy\system\config as config;
+use yellowheroes\jimmy\system\mvc\models as models;
+use yellowheroes\jimmy\system\libs as libs;
 
 /**
  * check if user is logged-in and has appropriate (admin) priviliges
@@ -51,11 +51,11 @@ if(isset($_POST['submit'])) {
     $registration = (new models\LoginModel())->registerUser();
     if ($registration[0] !== false) {
         $msg = $registration[1];
-        $alert = (new libs\BootWrap())->alert('success', $msg);
+        $alert = (new libs\BootWrap())->alert($msg, 'success');
         echo $alert;
     } elseif ($registration[0] === false) {
         $msg = $registration[1];
-        $alert = (new libs\BootWrap())->alert('warning', $msg);
+        $alert = (new libs\BootWrap())->alert($msg, 'warning');
         echo $alert;
     }
 }

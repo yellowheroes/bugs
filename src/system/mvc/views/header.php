@@ -1,8 +1,8 @@
 <?php
-namespace yellowheroes\projectname\system\mvc\views;
+namespace yellowheroes\jimmy\system\mvc\views;
 
-use yellowheroes\projectname\system\config as config;
-use yellowheroes\projectname\system\libs as libs;
+use yellowheroes\jimmy\system\config as config;
+use yellowheroes\jimmy\system\libs as libs;
 
 /**
  * start a secure session (or continue with started session)
@@ -24,19 +24,19 @@ $db = new libs\CoreModel();
 $usersDb = $db->usersDb;        // connection to flat-file database '_users'
 $sessionDb = $db->sessionDb;    // connection to flat-file database 'session'
 $settingsDb = $db->settingsDb;  // connection to flat-file database 'settings'
-
 //paths to assets/resources - used in hrefs
 $css = $config->path['css'];
 $javascript = $config->path['javascript'];
 $images = $config->path['images'];
+$ssechat = $config->path['ssechat'] . "/ssechat.php";
 
 //paths to view-dirs and view-pages - used in hrefs
 $index = $config->path['index'];    // home
 $blog = $config->path['blog'];      // blog
-$quill = $config->path['quill'];    // quill
+$quill = $config->path['quill'];    // ckeditor
 $edit = $config->path['editarticle'];
 $delete = $config->path['deletearticle'];
-$store = $config->path['storearticle'];
+$store = $config->path['storearticle']; // Quill::store(), invoking in turn, QuillModel::storeQuillContent()
 
 $chat = $config->path['chat']; // chat box
 $storechat = $config->path['storechat'];
@@ -176,6 +176,9 @@ $dropDowns = <<<HEREDOC
 HEREDOC;
 
 /* smooth scroll to anchors in articles */
+$listOffset = 0; // we do NOT want scrolling in list-view (bug #0001)
+$articleOffset = -150; // we DO want scrolling in article-view
+$offset = (isset($id)) ? $articleOffset : $listOffset; // if user selected an article, allow anchor scrolling.
 $anchors = <<<HEREDOC
 <script>
 $(document).ready(function(){
@@ -193,9 +196,8 @@ $(document).ready(function(){
       // Using jQuery's animate() method to add smooth page scroll
       // The optional number (3800) specifies the number of milliseconds it takes to scroll to the specified area
       $('html, body, textarea').animate({
-        scrollTop: $(hash).offset().top - 150
-      }, 3800, function(){
-   
+        scrollTop: $(hash).offset().top $offset
+      }, 1000, function(){
         // Add hash (#) to URL when done scrolling (default click behavior)
         //window.location.hash = hash;
       });
@@ -204,6 +206,21 @@ $(document).ready(function(){
 });
 </script>
 HEREDOC;
+
+$listAnchors = <<<HEREDOC
+<script>
+$(window).scrollTo("250px");
+</script>
+HEREDOC;
+
+/* if we have a blog-archive list view
+ * i.e. no article with a $id was selected,
+ * then do not activate anchor scrolling
+ * because it causes bug #0001:
+ * confirmation dialog scrolls out of view
+ * when user selects 'delete blog article' from list.
+ */
+$anchors = (isset($id)) ? $anchors : $listAnchors; // use $anchors scrolling in single article view, use $listAnchors in blog-list-view.
 
 /* a scroll to top button appears in bottom-right corner screen if we scroll down */
 $scrollToTopButton = <<<HEREDOC
@@ -242,7 +259,7 @@ HEREDOC;
 $bootWrap = new libs\BootWrap();
 $setJs = $bootWrap->setJs([$textEditor, $toolTips, $dropDowns, $anchors, $scrollToTop, $chatRefresh]);
 $setOther = $bootWrap->setOther($favicon);
-$tabTitle = 'yellow heroes';
+$tabTitle = config\Config::ORGNAME;
 /**
  * @var $headHtml all html content that sits between <head> ... </head> tags
  */
@@ -280,13 +297,13 @@ $logStatus = $session->get('log-status'); // returns array with 3 elements: BOOL
  * we insert an array to create a 'dashboard' dropdown menu
  * a divider (grey horizontal ruler) is inserted with ''=>'' as $key=>$value (see below)
  */
-$guest = ['home' => $index, 'contact' => $contact, 'login' => $login]; // guest access
-$editor = ['home' => $index, 'contact' => $contact, 'logout' => $logout];
-$admin = ['home' => $index, 'contact' => $contact,
+$guest = ['home' => $index, 'blog' => $blog, 'contact' => $contact, 'login' => $login]; // guest only has access to 'shared' blog
+$editor = ['home' => $index, 'blog' => $blog, 'quill' => $quill, 'chat' => $chat, 'contact' => $contact, 'logout' => $logout];
+$admin = ['home' => $index, 'blog' => $blog, 'quill' => $quill, 'chat' => $chat, 'contact' => $contact,
         'admin' => ['register new user' => $register,
                     'remove existing user' => $deregister, 'hr1' => '',
-                    'empty' => $dashboard,
-                    'empty' => $dashboard, 'hr2' => '',
+                    'create new blog' => $createblog,
+                    'delete blog' => $deleteblog, 'hr2' => '',
                     'dashboard' => $dashboard],
         'logout' => $logout];
 
@@ -326,8 +343,9 @@ $toolTip[1] = 'your are currently on page: ' . $location;
 /**
  * generate the navbar html
  */
+$org = config\Config::ORGNAME;
 $logoHref = $root;
-$logo = ['Yellow Heroes', $logoImage, $logoHref];
+$logo = [$org, $logoImage, $logoHref];
 /** we only want search functionality for the blog list overview ($id is only set if a specific article is rendered) */
 if ($bcViewsDir === 'blog' && !isset($id)) {
     $search = true;
@@ -335,7 +353,7 @@ if ($bcViewsDir === 'blog' && !isset($id)) {
     $search = false;
 }
 $activeNav = $bcViewsDir;
-$navBar = $bootWrap->navBarEnhanced($navItems, $activeNav, null, 'primary', 'sm', 'dark', 'dark', 'top', $logo, $userName, $toolTip, $location, $search = false);
+$navBar = $bootWrap->navBar($navItems, $activeNav, null, 'primary', 'sm', 'dark', 'dark', 'top', $logo, $userName, $toolTip, $location, $search = false);
 
 ?>
 <!-- render nav-bar in <header></header> -->
@@ -368,7 +386,7 @@ $redirectLocation = explode('_', $redirect);
 $redirectViewDir = $redirectLocation[0] ?? '';
 $redirectViewPage = $redirectLocation[1] ?? '';
 $msg = "You were redirected - your access privileges are insufficient to visit location: " . $redirectViewDir . "/" . $redirectViewPage;
-echo $bootWrap->alert('info', $msg);
+echo $bootWrap->alert($msg, 'info');
 $session->remove('access_denied'); // unset key 'access_denied'
 }
 

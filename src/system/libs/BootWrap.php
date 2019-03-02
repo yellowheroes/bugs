@@ -1,47 +1,32 @@
 <?php
 
-namespace yellowheroes\projectname\system\libs;
+namespace yellowheroes\jimmy\system\libs;
 
-use yellowheroes\projectname\system\config as config;
-
-/**
- * class bootWrap (bootstrap wrapper)
- * we use heredoc to wrap Bootstrap mark-up (components) into class methods.
- *
- * Heredoc tips: escaping
- * \n means newline
- * \r means return
- * \t means tab
- * \v means vertical tab
- * \b means backspace
- * \a means alert (beep or flash)
- *
- * this is not an exhaustive wrapper, we have selected only those components
- * we use regularly ourselves.
- *
- * the Bootstrap navigation components are custom-fitted to show active class on the correct DOM element (i.e. correct nav button)
- * the user sees based on our MVC-routing: i.e. controller/action/params
- *
- * When invoked, a function returns the Bootstrap html mark-up.
- *
- */
+use yellowheroes\jimmy\system\config as config;
 
 /**
  * Class BootWrap
- * @package yellowheroes\projectname\system\libs
+ * A PHP wrapper for (selected) Bootstrap components...
+ *
+ * Quickly generate (a html5 document with) Bootstrap components
+ * in your web-project.
+ *
+ * @package yellowheroes\bootwrap\libs
  */
 class BootWrap
 {
     /**
-     * @var string $htmlInit opening block html5 page
-     * @var string $meta html meta-data (charset, viewport)
-     * @var string $styles html CSS stylesheets (in <head>)
-     * @var string $libs html Bootstrap libraries, other javascript libraries (in <head>)
-     * @var string $js html additional javascript (libraries) and related CSS (e.g. for editor: Quill.js and snow.css in same block)  in <head>
-     * @var string $other optional any other html (in <head>)
-     * @var string title        browser tab title
-     * @var string footer       closing block html5 page
+     * @var string $htmlInit : opening block html5 page
+     * @var string $meta     : html meta-data
+     * @var string $styles   : html code CSS stylesheets (in <head>)
+     * @var string $libs     : html code Bootstrap libraries, other javascript libraries (in <head>)
+     * @var string $js       : html code additional javascript (libraries) and related CSS in <head>
+     * @var string $other    : optional - any other html placed in <head>
+     * @var string $title    : browser tab title
+     * @var string $footer   : closing block html5 page
      */
+
+    /* type hinting of properties will only be possible starting PHP7.4 */
     private $htmlInit = '';
     private $meta = '';
     private $styles = '';
@@ -49,10 +34,13 @@ class BootWrap
     private $js = '';
     private $other = '';
     private $title = '';
-    private $footer = '';
+    private $footer = null;
 
     /**
-     * BootWrap constructor
+     * BootWrap constructor.
+     *
+     * set the default html5 doctype elements
+     * and pull-in the necessary Bootstrap libs (js and css)
      */
     public function __construct()
     {
@@ -66,19 +54,8 @@ class BootWrap
     }
 
     /**
-     * setters to build the html5 document:
-     *          setHtmlInit()                           - document open
-     *          setMeta(), setStyles(), setLibs()       - <head> </head> section
-     *          setTitle()                              - browser-tab title
-     *              ...
-     *              nav-bar                             - defined in header.php
-     *              document body                       - each view-page renders the core content of the page
-     *              ...
-     *          setFooter()                             - document close
-     */
-
-    /**
      * set the opening block for html5 page
+     *
      * @return void
      */
     public function setHtmlInit(): void
@@ -92,6 +69,7 @@ HEREDOC;
 
     /**
      * set the required html meta tags (in <head> block)
+     *
      * @return void
      */
     public function setMeta(): void
@@ -104,13 +82,14 @@ HEREDOC;
 
     /**
      * set CSS stylesheets (in <head> block)
-     * @param array $styleSheets defines path to each style sheet
+     *
+     * @param array $styleSheets path to each style sheet
+     *
      * @return void
      */
     public function setStyles($styleSheets = []): void
     {
         // default CSS (minimum requirement for Bootstrap to function)
-        // the first call to setStyles() is on __construct(), with $styleSheets empty, so always get  default stylesheet
         if (empty($styleSheets)) {
             $this->styles = <<<HEREDOC
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">\n
@@ -127,13 +106,14 @@ HEREDOC;
 
     /**
      * set libraries that need to be referenced to enable Bootstrap (in <head> block)
+     *
      * @param array $libs
+     *
      * @return void
      */
     public function setLibs($libs = []): void
     {
         // default libraries (minimum requirement for Bootstrap to function)
-        // the first call to setLibs() is on __construct(), with $libs empty, so always get  default libs
         if (empty($libs)) {
             $this->libs = <<<HEREDOC
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -152,21 +132,25 @@ HEREDOC;
 
     /**
      * set any additional javascript (libraries) (in <head> block)
+     *
      * e.g. Bootstrap tooltips, or Bootstrap dropdowns, or some .js editor
+     *
      * @param array $js
+     *
      * @return void
      */
     public function setJs($js = []): void
     {
-        foreach ($js as $key)
-            $this->js .= <<<HEREDOC
+        foreach ($js as $key) $this->js .= <<<HEREDOC
 $key\n
 HEREDOC;
     }
 
     /**
-     * anything else we want to set (in <head> block)
+     * anything else - css / js - to set (in <head> block)
+     *
      * @param null $other
+     *
      * @return void
      */
     public function setOther($other = null): void
@@ -178,10 +162,12 @@ HEREDOC;
 
     /**
      * set the document title that will be shown on the browser-tab and used in search engine results
-     * @param string $title defaults to 'projectname'
+     *
+     * @param string $title defaults to 'bootwrap'
+     *
      * @return void
      */
-    public function setTitle($title = 'projectname'): void
+    public function setTitle($title = 'bootwrap'): void
     {
         $this->title = <<<HEREDOC
 <title>$title</title>\n\n
@@ -190,43 +176,83 @@ HEREDOC;
 
     /**
      * set the document footer
-     * @param string|null $footerContent
-     * @param string|null $other
+     *
+     * the footer can be constructed to contain hyperlinks
+     * format:
+     *          category title  display txt     linked doc  display txt   linked doc
+     *          ['general' => ['contact us' => 'home.php', 'about us' => 'about.php']]
+     *
+     * @param string        $copyRight      : optional copyright message
+     * @param array         $hrefs          : optional hypertext links
+     * @param string        $imageSrcPath   : optional image src path (e.g. logo)
+     *
+     * @return void
      */
-    public function setFooter($footerContent = null, $other = null): void
+    public function setFooter($copyRight = 'organisation', $hrefs = [], $imageSrcPath = ''): void
     {
         /** set default: copyright symbol and year */
         $copyRightSymbol = " &#169 ";
-        $copyrightYear = date("Y");
-        $footerContent .= $copyRightSymbol . $copyrightYear; // append Copyright notice: c YYYY - to footer content
+        $copyRightYear = date("Y");
+        $copyRight = $copyRight . $copyRightSymbol . $copyRightYear; // append Copyright notice: c YYYY - to footer content
+
+        /* construct the href - text-links - block */
+        $links = ''; // initialize
+        $image = ($imageSrcPath !== '') ? "<img class='float-right' src='$imageSrcPath' width='48px' height='48' style='margin: 10px;'>" : ''; // logo
+        if (!empty($hrefs)) {
+            $links = "<div class='row'>";
+            $links .= "<div class='col'>$image</div>"; // logo
+            foreach ($hrefs as $title => $textLink) { // each href list-block can have a title
+                $links .= "<div class='col'>"; // start div-column for each list-block of hrefs
+                foreach ($textLink as $display => $link) { // the actual links
+                    $title = $title ?? null;
+                    $title = strtoupper($title);
+                    $href = $this->href($link, $display);
+                    $links .= <<<HEREDOC
+            $title
+            <ul class="list-unstyled quick-links" style="line-height: 10px; font-size: 0.8em;">
+            <li style="text-left">
+            $href
+            </li>
+            </ul>\n
+HEREDOC;
+                    $title = null; // render title only once for each block or category of hrefs
+                }
+                $links .= "</div>"; // end div-column for a list-block of hrefs
+            }
+            $links .= "</div>"; // end div-row - all hypertext link blocks are generated
+        }
+        $links = ($links !== '') ? "<div class='text-muted' style='color: #FFFFFF !important;'>$links</div><div><br /></div>" : '';
+
         $this->footer = <<<HEREDOC
 </main>
 
-<footer class="footer bg-dark">
-    <div class="container text-center">
-        <span class="text-muted" style="color: #FFFFFF !important;">$footerContent</span>
+<footer class="footer" style="margin-top: 80px;">
+    <div class="container-fluid bg-dark">
+    <!-- <div><hr class="bg-primary"/></div> -->
+        $links
+        <div class="text-muted text-center" style="color: #FFFFFF !important;">$copyRight</div>
     </div>
 </footer>
 
 </body><!-- end body element, opening tag in header -->
-$other
 </html><!-- end html element, opening tag in header -->
 HEREDOC;
     }
 
     /**
      * @param string|null $title
-     * @param array|null $styleSheets
-     * @param array|null $libs
-     * @param array|null $js
-     * @param string|null $other
+     * @param array|null  $styleSheets
+     * @param array|null  $libs
+     * @param array|null  $js
+     * @param null        $other
+     *
      * @return string
      */
     public function head($title = null, $styleSheets = null, $libs = null, $js = null, $other = null): string
     {
-        $invoke = (isset($styleSheets)) ? $this->setStyles($styleSheets) : '';
-        $invoke = (isset($libs)) ? $this->setLibs($libs) : '';
-        $invoke = (isset($js)) ? $this->setJs($js) : '';
+        $invoke = (isset($styleSheets)) ? $this->setStyles($styleSheets) : null;
+        $invoke = (isset($libs)) ? $this->setLibs($libs) : null;
+        $invoke = (isset($js)) ? $this->setJs($js) : null;
 
         $head = <<<HEREDOC
 $this->htmlInit
@@ -237,7 +263,7 @@ $this->htmlInit
 		<!-- CSS -->
         $this->styles
 
-        <!-- Libraries - jQuery first, then Popper.js, then Bootstrap.js -->
+        <!-- Libraries - jQuery, Popper.js, Bootstrap.js -->
         $this->libs
         
         <!-- jQuery / JavaScript / CSS complementary -->\n
@@ -251,10 +277,6 @@ $this->htmlInit
 HEREDOC;
         return $head;
     }
-
-    /*
-     * getters
-     */
 
     /**
      * @return string
@@ -301,24 +323,23 @@ HEREDOC;
      * Create a Bootstrap modal
      *
      * https://getbootstrap.com/docs/4.1/components/modal/
-     * Bootstrap modals are built with HTML, CSS, and JavaScript. They’re positioned over everything else in the document and remove
-     * scroll from the <body> so that modal content scrolls instead.
+     * Modals are built with HTML, CSS, and JavaScript. They’re positioned over everything else in the document and
+     * remove scroll from the <body> so that modal content scrolls instead.
      * Clicking on the modal “backdrop” will automatically close the modal.
-     * Bootstrap only supports one modal window at a time. Nested modals aren’t supported as we believe them to be poor user
-     * experiences.
-     * Modals use position: fixed, which can sometimes be a bit particular about its rendering. Whenever possible, place your
-     * modal HTML in a top-level position to avoid potential interference from other elements. You’ll likely run into issues
-     * when nesting a .modal within another fixed element.
-     * Once again, due to position: fixed, there are some caveats with using modals on mobile devices. See our browser support
-     * docs for details.
-     * Due to how HTML5 defines its semantics, the autofocus HTML attribute has no effect in Bootstrap modals. To achieve the
-     * same effect, use some custom JavaScript:
+     * Bootstrap only supports one modal window at a time. Nested modals aren’t supported as we believe them to be poor
+     * user experiences. Modals use position: fixed, which can sometimes be a bit particular about its rendering.
+     * Whenever possible, place your modal HTML in a top-level position to avoid potential interference from other
+     * elements. You’ll likely run into issues when nesting a .modal within another fixed element. Once again, due to
+     * position: fixed, there are some caveats with using modals on mobile devices. See our browser support docs for
+     * details. Due to how HTML5 defines its semantics, the autofocus HTML attribute has no effect in Bootstrap modals.
+     * To achieve the same effect, use some custom JavaScript.
      *
      * @param string|null $title
      * @param string|null $msg
-     * @param bool $showOnload
-     * @param string $id
-     * @return string
+     * @param bool        $showOnload
+     * @param string      $id
+     *
+     * @return string return Bootstrap modal HTML
      */
     public function modal($title = null, $msg = null, $showOnload = false, $id = 'yhModal'): string
     {
@@ -359,6 +380,7 @@ HEREDOC;
 
     /**
      * @param array $params
+     *
      * @return string
      */
     public function newForm(array $params = [])
@@ -485,13 +507,13 @@ HEREDOC;
         <button type="submit" name="submit" class="btn btn-primary">$submitDisplay</button>
 HEREDOC;
 
-        $confirmSubmit = ($confirmationDialog === true) ? $this->confirmationDialog($submitDisplay, 'confirmationDialog', 'Please confirm...', false) : false;
+        $confirmSubmit = ($confirmationDialog === true) ? $this->confirmationDialog($submitDisplay, '', 'confirmationDialog', 'confirm', 'Please confirm...', false) : false;
 
         /**
          *  store either 'normal' or 'confirmation' button in $submitButton
          *
          * IMPORTANT: the normal button has field-name 'submit', whereas the 'confirmation' button field-name is 'confirm'
-         *              so when checking e.g. $_POST, make sure you're checking the correct field-name.
+         *            so when checking e.g. $_POST, make sure you're checking the correct field-name.
          */
         $submitButton = ($confirmSubmit !== false) ? $confirmSubmit : $normalSubmit;
 
@@ -530,13 +552,17 @@ HEREDOC;
     /**
      * Form
      *
-     * @param string $submitDisplay set it to false if no form submit button should be rendered, anything else will be displayed on button
-     *                                  a typical use-case for a form without a submit button is where we substitute it for a confirmDialog button (are you sure...)
-     *                                  where field-name 'submit' becomes 'confirm' (e.g. delete actions, where we need to be sure this is what user wants).
+     * @param string $submitDisplay     set it to false if no form submit button should be rendered, anything else will
+     *                                  be displayed on button a typical use-case for a form without a submit button is
+     *                                  where we substitute it for a confirmDialog button (are you sure...) where
+     *                                  field-name 'submit' becomes 'confirm' (e.g. delete actions, where we need to be
+     *                                  sure this is what user wants).
      *
-     * @param array inputFields         array that holds an array for each input-field: ['type', 'name', 'id', 'value', 'placeholder', options[]]
+     * @param array inputFields         array that holds an array for each input-field: ['type', 'name', 'id', 'value',
+     *                                  'placeholder', options[]]
      *
-     *                                  'type' in   case formfield:     set 'type' to - 'text' or 'email' or 'password', or...
+     *                                  'type' in   case formfield:     set 'type' to - 'text' or 'email' or
+     *                                  'password', or...
      *
      *                                      case selectbox:     set 'type' to - 'select' - select type html-block
      *
@@ -546,38 +572,46 @@ HEREDOC;
      *
      *                                      case file:          set 'type' to - 'file'
      *
-     *                                      'name' is the reference to retrieve the user-input in the $_POST(default) or $_GET array
+     *                                      'name' is the reference to retrieve the user-input in the $_POST(default)
+     *                                      or $_GET array
      *
      *                                      'id' is the identifier, can be used for e.g. javascript or CSS reference
      *
-     *                                      'value' is the initial value that can be set in the input box (can be handy in setting 'hidden' input box values).
+     *                                      'value' is the initial value that can be set in the input box (can be handy
+     *                                      in setting 'hidden' input box values).
      *
      *                                      'placeholder' shows in the input field as a 'hint'
      *
-     *                                      options[] - e.g. set 'required' on a field, or define select-list-items, or set checked on a default choice radio button.
+     *                                      options[] - e.g. set 'required' on a field, or define select-list-items, or
+     *                                      set checked on a default choice radio button.
      *
      * EXAMPLE:
      * $inputFields =  [
      *                  ['text', 'slug', 'slug', "", 'enter article slug'],
      *                  ['hidden', 'existingArticleId', 'existingArticleId', $existingArticleId, ""],
-     *                  ['hidden', 'store', 'store', $store, ""] // a same-type form-field needs to be 'marked' with an '*'
+     *                  ['hidden', 'store', 'store', $store, ""] // a same-type form-field needs to be 'marked' with an
+     *                  '*'
      *                 ];
-     * $form = (new libs\BootWrap())->form($inputFields, false); // 'false' as we do not need a submit button, we have a seperate button to trigger jQuery code
+     * $form = (new libs\BootWrap())->form($inputFields, false); // 'false' as we do not need a submit button, we have
+     * a seperate button to trigger jQuery code
      *
      * @backHref    a 'back' button, just set the href for the target location.
      */
 
     /**
-     * @param array $inputFields text, password, select, hidden...
-     * @param string $submitDisplay
-     * @param string $method
-     * @param string $action
-     * @param string $formId
-     * @param bool $backHref
-     * @param array $confirmationDialog [0] set to true if you want a confirmation dialog, [1] set to true if you want href text, true if you want a button.
-     * @return string
+     * @param array         $inputFields            : text, password, select, hidden...
+     * @param string        $submitDisplay          : the text displayed on the submit button
+     * @param string        $method                 : POST or GET
+     * @param string|bool   $action                 : the script that gets invoked on submit, or if 'false' no action at all(no page refresh)
+     * @param string        $formId                 : the #id of the form
+     * @param bool          $backHref               : a back-button href link
+     * @param string        $backDisplay            : the text displayed on the back button (defaults to 'Back')
+     * @param array         $confirmationDialog     : [0] == false, no confirmation dialog triggered, [0] == true - a confirmation dialog is triggered
+     *                                                [1] == true, 'text-href' [1] == false, 'button-href'
+     *
+     * @return string                               : the form html
      */
-    public function form($inputFields = [], $submitDisplay = 'submit', $method = 'POST', $action = "#", $formId = "formId", $backHref = false, $confirmationDialog = [false, true])
+    public function form($inputFields = [], $submitDisplay = 'submit', $method = 'POST', $action = "#", $formId = "formId", $backHref = false, $backDisplay = 'Back', $confirmationDialog = [false, true])
     {
         /**
          * we use a short HEREDOC to define the action attribute
@@ -612,13 +646,14 @@ HEREDOC;
             $fieldValue = $value[3] ?? ""; // can be useful to set initial value or for hidden form fields where a field value can be carried-over to next page
             $placeholder = $value[4] ?? "";
             $label = ($type !== 'hidden') ? $value[5] : "";
-            $options = $value[6] ?? null; // $value[6] contains an array with options(for e.g. to set 'required' or for select or radio buttons)
-
+            $options = $value[6] ?? null; // $value[5] contains an array with options(for e.g. to set 'required' or for select or radio buttons)
 
             /** type: text or password or email */
             if ($type === 'text' || $type === 'password' || $type === 'email' || $type === 'hidden') {
+                /* hidden form fields may not take screen space */
+                $style = ($type === 'hidden') ? "style='display: none'" : null;
                 $formFields .= <<<HEREDOC
-        <div class="form-group">
+        <div class="form-group" $style>
             <label for="$id" class="col-sm-2 control-label">$label</label>
             <div class="col-sm-10">
             <input type="$type" class="form-control" name="$name" id="$id" value="$fieldValue" placeholder="$placeholder" $options[0]>
@@ -673,7 +708,7 @@ HEREDOC;
 
         if ($backHref) {
             $backButton = <<<HEREDOC
-        <button type="button" class="btn btn-primary pull-right" onclick="location.href='$backHref';">Back</button>\n
+        <button type="button" class="btn btn-primary pull-right" onclick="location.href='$backHref';">$backDisplay</button>\n
 HEREDOC;
         } else {
             $backButton = '';
@@ -687,10 +722,10 @@ HEREDOC;
         $normalSubmit = <<<HEREDOC
         <button type="submit" name="submit" class="btn btn-primary">$submitDisplay</button>
 HEREDOC;
-        // confirmationDialog($display = '', $id = 'confirmationDialog', $uniqueConfirmName = 'confirm', $msg = 'Please confirm...', $href = [])
+
         // $confirmationDialog
         $href = ($confirmationDialog[1] === true) ? true : false; // a button (if false), or a href text (if true)
-        $confirmSubmit = ($confirmationDialog[0] === true) ? $this->confirmationDialog($submitDisplay, $id = 'confirmationDialog', $uniqueConfirmName = 'confirm', $msg = 'Please confirm...', $href) : false;
+        $confirmSubmit = ($confirmationDialog[0] === true) ? $this->confirmationDialog($submitDisplay, '', 'confirmationDialog', 'confirm', 'Please confirm...', $href) : false;
 
         /**
          *  store either 'normal' or 'confirmation' button in $submitButton
@@ -731,7 +766,14 @@ HEREDOC;
         return $formHtml;
     }
 
-    public function searchForm($method = 'POST', $name = 'search', $action = false)
+    /**
+     * @param string $method    : POST(default) or GET
+     * @param string $name      : the field-name we pick up wih $_POST['field-name'] or $_GET['field-name']
+     * @param bool   $action    : false == no action attribute, i.e. ensure we do not refresh page (AJAX call)
+     *
+     * @return string           : the search-form html
+     */
+    public function searchForm($method = 'POST', $name = 'search', $action = false): string
     {
         /**
          * we use a short HEREDOC to define the action attribute
@@ -761,7 +803,7 @@ HEREDOC;
     }
 
     /**
-     * dropdown items only work with js-plugin - we include the functionality in header.php
+     * dropdown items only work with js-plugin - we include the functionality in Header.php
      * <script>
      *  $(function () {
      *       $('.dropdown-toggle').dropdown()
@@ -769,15 +811,25 @@ HEREDOC;
      *   </script>
      *
      * @param string $menuDisplay
-     * @param array $navItems ['display1'=>'href1', 'display2'=>'href2' etc...]
+     * @param array  $navItems  ['display1'=>'href1', 'display2'=>'href2' etc...]
      *
      *                                  if you want to insert a divider (horizontal ruler)
      *                                  just insert ''=>''
      *                                  e.g.
-     *                                  ['display1'=>'href1', ''=>'', 'display2'=>'href2'] renders a divider between the two anchors
+     *                                  ['display1'=>'href1', ''=>'', 'display2'=>'href2'] renders a divider between
+     *                                  the two anchors
      * @param string $activeNav 'nav-item' or 'nav-item-active'
      */
-    public function dropDown($menuDisplay = 'dropdown', $navItems = [], $activeNav = null, $class = 'primary', $size = 'md')
+    /**
+     * @param string $menuDisplay
+     * @param array  $navItems
+     * @param string $activeNav
+     * @param string $class
+     * @param string $size
+     *
+     * @return string
+     */
+    public function dropDown($menuDisplay = 'dropdown', $navItems = [], $activeNav = '', $class = 'primary', $size = 'md'): string
     {
         $dropDownItems = null;
         /*
@@ -785,10 +837,10 @@ HEREDOC;
          * e.g. when user clicks drop-down button 'Dashboard', trying to highlight it with class 'active'
          * or 'nav-item active' doesn't work, so we set it manually here.
          */
-        //$textNormalColor = "color: #FFFFFF;"; // not selected, we set it to grey-blue
-        //$textActiveColor = "color: #FFC000;"; // selected, highlight text
-        $textNormalColor = "color: " . config\Config::TXTCOLOR_NORMAL_NAV;
-        $textActiveColor = "color: " . config\Config::TXTCOLOR_ACTIVE_NAV;
+        $textNormalColor = "color: #FFFFFF;"; // not selected, we set it to grey-blue
+        $textActiveColor = "color: #FFC000;"; // selected, highlight text
+        //$textNormalColor = "color: " . config\Config::TXTCOLOR_NORMAL_NAV;
+        //$textActiveColor = "color: " . config\Config::TXTCOLOR_ACTIVE_NAV;
         $color = ($activeNav === 'nav-item active') ? $textActiveColor : $textNormalColor;
 
         $dropDownOpen = <<<HEREDOC
@@ -844,14 +896,17 @@ HEREDOC;
      *
      * To invoke this type of button as a navButton, the client sets the $type argument to 'button'.
      *
-     * @param string $href link's destination
-     * @param string $activeNav set to a nav-item display value: e.g. 'home' to set the active button (highlighted) for the 'home' page-view
-     * @param string $display text displayed on button
-     * @param string $class primary, secondary, success, danger, warning, info, light, dark
-     * @param string $size 'lg' for large, 'sm' for small
-     * @param string $type 'button' for a button-type nav-button
+     * @param string $href      link's destination
+     * @param string $activeNav set to a nav-item display value: e.g. 'home' to set the active button (highlighted) for
+     *                          the 'home' page-view
+     * @param string $display   text displayed on button
+     * @param string $class     primary, secondary, success, danger, warning, info, light, dark
+     * @param string $size      'lg' for large, 'sm' for small
+     * @param string $type      'button' for a button-type nav-button
+     *
+     * @return string $navButtonHtml    : navigation button html
      */
-    public function navButton($display = 'click me', $href = '#', $activeNav = null, $type = null, $class = 'primary', $size = null)
+    public function navButton($display = 'click me', $href = '#', $activeNav = null, $type = null, $class = 'primary', $size = null): string
     {
         $textNormalColor = "color: " . config\Config::TXTCOLOR_NORMAL_NAV;
         $textActiveColor = "color: " . config\Config::TXTCOLOR_ACTIVE_NAV;
@@ -869,22 +924,25 @@ HEREDOC;
         return $navButtonHtml;
     }
 
-    /**                                 ACTION BUTTONS
+    /**
+     * BootWrap::actionButton()
+     * Action buttons are normally not used in navigation but in e.g. forms, dialogs etc.
      *
-     * Button used in anything but navigation, e.g. forms, dialogs
-     * The client can invoke the rendering of a 'filled'(default) or 'outline' button
+     * The client can invoke a 'filled'(default) or 'outlined' button
+     * Action buttons can be turned into navigation buttons(see BootWrap::navButton()), like so:
+     * &ltbutton type="button" class="btn btn-outline-primary" onclick="location.href='$url';">navigational
+     * action&lt/button&gt.
      *
-     * we can also turn the action buttons into navigation buttons, like so:
-     * <button type="button" class="btn btn-outline-primary" onclick="location.href='$url';">navigational action</button>
+     * @param string $display : text displayed on button
+     * @param string $class   : primary, secondary, success, danger, warning, info, light, dark
+     * @param bool   $outline : default solid fill, set to true if you want an outline-styled button
      *
-     * we offer this functionality in BootWrap::navButton()
-     *
-     * @param string $display text displayed on button
-     * @param string $class primary, secondary, success, danger, warning, info, light, dark
-     * @param string $outline default solid fill, set to true if you want an outline-styled button
+     * @return string         : action-button html
      */
-    public function actButton($display = 'click me', $class = 'primary', $outline = false)
+    public function actionButton(string $display = 'click me', string $class = 'primary', bool $outline = false): string
     {
+        $actionButtonHtml = '';
+
         $button = <<<HEREDOC
         <button type="button" class="btn btn-$class">$display</button>\n
 HEREDOC;
@@ -894,14 +952,17 @@ HEREDOC;
 HEREDOC;
 
         // does the user want a filled / outline button
-        $actButtonHtml = ($outline !== true) ? $button : $buttonOl;
-        return $actButtonHtml;
+        $actionButtonHtml = ($outline !== true) ? $button : $buttonOl;
+        return $actionButtonHtml;
     }
 
     public function href($link = null, $display = 'click me', $class = 'primary', $cssClass = null)
     {
+        /*$hrefHtml = <<<HEREDOC
+       <span class="$cssClass" style='margin-left: 10px;'><a href="$link">$display</a></span>
+HEREDOC;*/
         $hrefHtml = <<<HEREDOC
-       <ul class="$cssClass" style='margin-left: 10px;'><a href="$link">$display</a></ul>
+       <span class="$cssClass"><a href="$link">$display</a></span>
 HEREDOC;
         return $hrefHtml;
     }
@@ -914,14 +975,14 @@ HEREDOC;
      *
      * BootWrap::navBarNavButtons() custom-made(YH) navigation bar with navButtons
      *
-     * @param array $navItems []     set each nav-item's display-name (key) and href (value)
+     * @param array  $navItems []     set each nav-item's display-name (key) and href (value)
      *
      *                                    display  href    display     href
      *                              e.g. ['home'=>'index', 'contact'=>'contact']
      *
-     * @param string $type 'button' for a button-type nav-button
-     * @param string $class primary, secondary, success, danger, warning, info, light, dark
-     * @param string $size 'lg' for large, 'sm' for small, md for medium
+     * @param string $type     'button' for a button-type nav-button
+     * @param string $class    primary, secondary, success, danger, warning, info, light, dark
+     * @param string $size     'lg' for large, 'sm' for small, md for medium
      *
      * @param alignment             place the navbar at 'top', 'bottom', or make it 'sticky' (scroll with content)
      * @param logo                  logo[0]=display text, logo[1]=href to image
@@ -929,7 +990,8 @@ HEREDOC;
      *
      * EXAMPLE: set appropriate nav-items dependent on the user profile: authorised / not authorised
      * $nonAuthUser = ['home'=>'index', 'login'=>'login', 'contact us'=>'contact'];
-     * $authUser = ['home'=>'index', 'quill'=>'quill', 'repo'=>'repo', 'contact us'=>'contact', 'register new user'=>'dashboard/register', 'logout'=>'logout'];
+     * $authUser = ['home'=>'index', 'quill'=>'quill', 'repo'=>'repo', 'contact us'=>'contact', 'register new
+     * user'=>'dashboard/register', 'logout'=>'logout'];
      * $navItems = ($logged === 'true') ? $authUser : $nonAuthUser;
      * $logo = ['Yellow Heroes', $logoImage];
      * $navBar = $bootWrap->navBarNavButtons($navItems, null, 'primary', 'sm', 'dark', 'dark', 'top', $logo);
@@ -976,7 +1038,7 @@ HEREDOC;
      * end NEW
      */
     /**
-     * NEW navBarEnhanced
+     * NEW navBar
      * with navItems['type'=>['display', 'href'], 'type'=>['display', 'href']
      * because we want to be able to add multiple types (button, drop-down, ...)
      *
@@ -987,34 +1049,31 @@ HEREDOC;
      *
      * BootWrap::navBarNavButtons() custom-made(YH) navigation bar with navButtons
      *
-     * @param array $navItems []     set each nav-item's display-name (key) and href (value)
+     * @param array  $navItems  []     set each nav-item's display-name (key) and href (value)
      *
-     *                                    display  href    display     href
-     *                              e.g. ['home'=>'index', 'contact'=>'contact']
+     *                              and if you want to add a dropdown menu, enter a [] with the dropdown menu items as
+     *                              follows:
      *
-     *                              and if you want to add a dropdown menu, enter a [] with the dropdown menu items as follows:
+     *                                    display  href    display     href             menu-display         display
+     *                                            href            display             href e.g. ['home'=>'index',
+     *                                            'contact'=>'contact',
+     *                                            'dropdownMenuDisplay'=>['dropdownitem1'=>'dropdownhref1',
+     *                                            'dropdowndisplay2'=>'dropdownhref2', etc...]]
      *
-     *                                    display  href    display     href             menu-display         display            href            display             href
-     *                              e.g. ['home'=>'index', 'contact'=>'contact', 'dropdownMenuDisplay'=>['dropdownitem1'=>'dropdownhref1', 'dropdowndisplay2'=>'dropdownhref2', etc...]]
+     *                              the function will recognise the dropdown as the $value === type array. This
+     *                              triggers the function to call Bootwrap::dropdown().
      *
-     *                              the function will recognise the dropdown as the $value === type array. This triggers the function to call Bootwrap::dropdown().
-     *
-     * @param string $activeNav set to a nav-item display value: e.g. 'home' to set the active button (highlighted) for the 'home' page-view
-     * @param string $class primary, secondary, success, danger, warning, info, light, dark
-     * @param string $size 'lg' for large, 'sm' for small, md for medium
+     * @param string $activeNav set to a nav-item display value: e.g. 'home' to set the active button (highlighted) for
+     *                          the 'home' page-view
+     * @param string $class     primary, secondary, success, danger, warning, info, light, dark
+     * @param string $size      'lg' for large, 'sm' for small, md for medium
      *
      * @param alignment             place the navbar at 'top', 'bottom', or make it 'sticky' (scroll with content)
      * @param logo                  logo[0]=display text, logo[1]=href to image
      *
-     *
-     * EXAMPLE: set appropriate nav-items dependent on the user profile: authorised / not authorised
-     * $nonAuthUser = ['home'=>'index', 'login'=>'login', 'contact us'=>'contact'];
-     * $authUser = ['home'=>'index', 'quill'=>'quill', 'repo'=>'repo', 'contact us'=>'contact', 'register new user'=>'dashboard/register', 'logout'=>'logout'];
-     * $navItems = ($logged === 'true') ? $authUser : $nonAuthUser;
-     * $logo = ['Yellow Heroes', $logoImage];
-     * $navBar = $bootWrap->navBarNavButtons($navItems, null, 'primary', 'sm', 'dark', 'dark', 'top', $logo);
+     * @return string               navigation bar html
      */
-    public function navBarEnhanced($navItems = [], $activeNav = null, $type = null, $class = 'primary', $size = 'md', $textColor = 'dark', $bgColor = 'dark', $alignment = 'top', $logo = [], $userName = 'visitor', $toolTip = null, $location = null, $search = false)
+    public function navBar($navItems = [], $activeNav = null, $type = null, $class = 'primary', $size = 'md', $textColor = 'dark', $bgColor = 'dark', $alignment = 'top', $logo = [], $userName = 'visitor', $toolTip = null, $location = null, $search = false): string
     {
         $buttons = '';
 
@@ -1048,9 +1107,15 @@ HEREDOC;
 HEREDOC;
         $searchFormHtml = ($search !== false) ? $searchFormHtml : ''; // include search form html or keep empty if $search === false
 
-        $navBarEnhancedHtml = <<<HEREDOC
+        $logoTxt = $logoSrc = $logoHref = ''; // initialize
+        if (!empty($logo)) {
+            $logoTxt = $logo[0]; // e.g. organisation name / company name
+            $logoSrc = $logo[1]; // the path to the logo image
+            $logoHref = $logo[2]; // link when the logo is clicked
+        }
+        $navBarHtml = <<<HEREDOC
 <nav class="navbar $alignment navbar-expand-lg navbar-$textColor p-3 bg-$bgColor">
-    <img src="{$logo[1]}" width="24" height="24"><a class="navbar-brand p-2" href="{$logo[2]}">{$logo[0]}</a>
+    <img src="{$logoSrc}" width="24" height="24"><a class="navbar-brand p-2" href="{$logoHref}">{$logoTxt}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -1059,120 +1124,47 @@ HEREDOC;
 $buttons
     </ul>
  $searchFormHtml
-    <div class='col pull-right'>
-    <p class="navbar-text text-right pull-right text-white bg-dark navbar-right m-3" data-toggle="tooltip" data-placement="auto" title="{$toolTip[0]}"><i class="fa fa-user-circle-o"></i> $userName </p>
-    <p class="navbar-text text-right pull-right text-white bg-dark navbar-right m-3" data-toggle="tooltip" data-placement="auto" title="{$toolTip[1]}"><i class="fa fa-map-marker"></i> $location</p>  
+    <div class='col pull-right text-right'>
+    <p class="navbar-text text-right pull-right text-white navbar-right m-3" data-toggle="tooltip" data-placement="auto" title="{$toolTip[0]}"><i class="fa fa-user-circle-o"></i><span class='pull-right'>$userName</span></p>
+    <p class="navbar-text text-right pull-right text-white navbar-right m-3" data-toggle="tooltip" data-placement="auto" title="{$toolTip[1]}"><i class="fa fa-map-marker"></i><span class ='pull-right'>$location</span></p>  
     </div>
    </div>
 </nav>\n
 HEREDOC;
 
-        return $navBarEnhancedHtml;
-    }
-    /**
-     * end NEW navBarEnhanced
-     */
-
-    /**                     NEEDS LOOK, DOESNT FUNCTION
-     *
-     *
-     *
-     * Bootstrap component          nav
-     *
-     * BootWrap::navBar()           basic navigation bar with buttons and dropdown(s)
-     *
-     * @param array $navItems []     set each nav-item's display-name (key) and href=viewsDir (value)
-     *
-     *                                    display  href    display     href
-     *                              e.g. ['home'=>'/index', 'contact'=>'/contact']
-     *
-     * @param textColor             dark or light
-     *
-     * @param bgColor               primary, secondary, success, danger, warning, info, light, dark
-     *
-     * @param placement             top, bottom, sticky
-     *
-     * @param logo                  href to a small logo that will be rendered as first item on nav-bar
-     *
-     * @param string $alignment default the navbar renders from the left
-     *                              options:    center
-     *                                          right
-     *                                          fill (extend the full available width)
-     *                                          stack  (stacked tabs)
-     */
-    public function navBar($navItems = [], $textColor = null, $bgColor = null, $alignment = 'top', $logo = null)
-    {
-        $anchors = '';
-        $divs = '';
-        $count = 0;
-        foreach ($navItems as $key => $value) {
-            //$active = ($count === 0) ? 'active' : ''; // 'active' is CSS code, only first <a></a> needs this
-            $active = '';
-            //$sronly = ($count === 0) ? '<span class="sr-only">(current)</span>' : '';
-            $sronly = '';
-            $display = $key;
-            $href = $value;
-
-            // first, generate an anchor for each 'nav-item'
-            $anchor = <<<HEREDOC
-<li><a href="$href">$display</a></li>\r\n
-HEREDOC;
-            $anchors .= $anchor;
-
-            $count++;
-        }
-
-        if ($alignment !== 'top') {
-            if ($alignment === 'bottom') {
-                $alignment = 'fixed-bottom';
-            } elseif ($alignment === 'sticky') {
-                $alignment = 'sticky-top';
-            }
-        } else {
-            $alignment = 'fixed-top';
-        }
-
-        $navBar = <<<HEREDOC
-<div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-$anchors
-    </ul>
-          </div><!--/.nav-collapse -->
-       </div>
-      </div>
-    </div>\n
-
-HEREDOC;
-        $navBarHtml = $navBar;
         return $navBarHtml;
     }
+    /**
+     * end NEW navBar
+     */
 
     /**
      * Bootstrap component          nav
      *
      * BootWrap::navTabs()          navigate using tabs - content loaded with jQuery Ajax
      *
-     * @param array $tabs set element '#id' and tab display-name for each 'tab'
+     * @param array  $tabs                      set element '#id' and tab display-name for each 'tab'
      *
      *                                     DOM      tab      DOM          tab
      *                                      id    display     id        display
      *                              e.g. ['home'=>'home', 'contact'=>'contact us']
      *
-     * @param array $pageContent the content that will be rendered on each 'tab' (page)
-     *                              argument can be a simple string or a file (e.g. index.php, contact.html, something.txt...)
-     *                              e.g. $pageContent = ['Site Under Construction', 'Something about the team...', 'index3.php'];
-     *                              The first argument is content that will be rendered on the first 'tab', the second arg. is content for the second 'tab', etc.
+     * @param array  $pageContent               the content that will be rendered on each 'tab' (page)
+     *                                          argument can be a simple string or a file (e.g. home.php, contact.html,
+     *                                          something.txt...) e.g. $pageContent = ['Site Under Construction',
+     *                                          'Something about the team...', 'index3.php']; The first argument is
+     *                                          content that will be rendered on the first 'tab', the second arg. is
+     *                                          content for the second 'tab', etc.
      *
-     * @param string $alignment default the tabs render from the left
-     *                              options:    center
+     * @param string $alignment                 default the tabs render from the left
+     *                                          options:    center
      *                                          right
      *                                          fill (extend the full available width)
      *                                          stack  (stacked tabs)
+     *
+     * @return string $navTabHtml       : navigation tab html
      */
-    public function navTabs($tabs = [], $pageContent = [], $alignment = null)
+    public function navTabs($tabs = [], $pageContent = [], $alignment = null): string
     {
         $anchors = '';
         $divs = '';
@@ -1256,26 +1248,30 @@ HEREDOC;
      *
      * BootWrap::navPills()         navigate using pills(pill-shaped buttons) - content loaded with jQuery Ajax
      *
-     * @param array $pills set element '#id' and tab display-name for each 'tab'
+     * @param array  $pills                     set element '#id' and tab display-name for each 'tab'
      *
      *                                     DOM      tab      DOM          tab
      *                                      id    display     id        display
      *                              e.g. ['home'=>'home', 'contact'=>'contact us']
      *
-     * @param array $pageContent the content that will be rendered on each 'tab' (page)
-     *                              argument can be a simple string or a file (e.g. index.php, contact.html, something.txt...)
-     *                              e.g. $pageContent = ['Site Under Construction', 'Something about the team...', 'index3.php'];
-     *                              The first argument is content that will be rendered on the first 'tab', the second arg. is content for the second 'tab', etc.
+     * @param array  $pageContent               the content that will be rendered on each 'tab' (page)
+     *                                          argument can be a simple string or a file (e.g. home.php, contact.html,
+     *                                          something.txt...) e.g. $pageContent = ['Site Under Construction',
+     *                                          'Something about the team...', 'index3.php']; The first argument is
+     *                                          content that will be rendered on the first 'tab', the second arg. is
+     *                                          content for the second 'tab', etc.
      *
-     * @param string $alignment default the pills render from the left
-     *                              options:    'center'
+     * @param string $alignment                 default the pills render from the left
+     *                                          options:    'center'
      *                                          'right'
      *                                          'fill' (extend the full available width)
      *                                          'stack'  (stacked pills - i.e. a vertical navigation menu)
-     *                                          (if 'stack' is selected, client can set the width of the buttons with $grid)
+     *                                          (if 'stack' is selected, client can set the width of the buttons with
+     *                                          $grid)
      *
-     * @param int $grid for vertically stacked pills, set relative width for pills (# columns out of total 12)
-     *                              default 3 columns for pills, and remaining 9 columns for the content
+     * @param int    $grid                      for vertically stacked pills, set relative width for pills (# columns
+     *                                          out of total 12) default 3 columns for pills, and remaining 9 columns
+     *                                          for the content
      *
      */
     public function navPills($pills = [], $pageContent = [], $alignment = null, $grid = 3)
@@ -1396,12 +1392,27 @@ HEREDOC;
      * @param type $href = true         set to false if you want to render a button, not <a > hypertext link
      *
      * $display = the text of the href link
-     * $id = the id of the element - IMPORTANT when e.g. rendering a list of blog-articles need to set individual #id's for each <div> in the list so the dialog renders in the right place
+     * $id = the id of the element - IMPORTANT when e.g. rendering a list of blog-articles need to set individual #id's
+     * for each <div> in the list so the dialog renders in the right place
      * $msg = the confirmation message
      *
      * two field 'name' s : 'confirm' and 'cancel'
      */
-    public function confirmationDialog($display = '', $id = 'confirmationDialog', $uniqueConfirmName = 'confirm', $msg = 'Please confirm...', $href = true)
+
+    /**
+     * @param string $display           : the text of the href link (or button) - e.g. 'delete article' or 'delete file'
+     * @param string $action            : the target script that is invoked on 'confirm' or 'cancel' (there are two submit buttons)
+     * @param string $id                : the id of the element
+     *                                      IMPORTANT - when e.g. rendering a list of items
+     *                                      you need to set individual #id's for each item <div>
+     *                                      in the list, so the dialog renders in the right place.
+     * @param string $name              : the confirm field-name we can pick up with $_POST[] or $_GET[]
+     * @param string $msg               : the confirmation message ('are you sure?')
+     * @param bool   $href              : set this to false if you want to render a button (i.e. not a hypertext link)
+     *
+     * @return string
+     */
+    public function confirmationDialog($display = '', $action = '', $id = 'confirmationDialog', $name = 'confirm', $msg = 'Please confirm...', $href = true): string
     {
         $button = '';
         if ($href === true) {
@@ -1419,8 +1430,7 @@ HEREDOC;
 HEREDOC;
         }
 
-        $action = ($href !== '') ? $href : $button;
-
+        $link = ($href !== '') ? $href : $button;
 
         /*
          * note: we declare a unique name for the confirm field, as we may have multiple confirmation forms on one page.
@@ -1428,14 +1438,14 @@ HEREDOC;
          */
         $confirmationDialogHtml = <<<HEREDOC
 <p>
-  $action
+  $link
 </p>
 <div class="collapse" id="$id">
   <div class="card card-body">    
     <p>$msg</p>
     <div>
-      <form method='post' action='$id'>
-        <input type='submit' class="btn btn-primary" name='$uniqueConfirmName' value='confirm'>
+      <form method='post' action='$action'>
+        <input type='submit' class="btn btn-primary" name='$name' value='confirm'>
         <input type='submit' class="btn btn-primary" name='cancel' value='cancel'>
       </form>
     </div>
@@ -1449,15 +1459,21 @@ HEREDOC;
     /**
      * coverNav are underlined navigation items
      * the css styling sits in 'cover.css'
+     *
+     * @param array $navItems       : key=display, value=link(href)
+     * @param string $activeNav     : highlight the active VIEW nav-button text
+     * @param null  $brand          : e.g. a company logo that's rendered left of the navbar
+     *
+     * @return string               : a nav-bar (styled to Bootstrap class 'cover-container')
      */
-    public function coverNav($navItems = [], $viewsDir = null, $brand = null)
+    public function coverNav($navItems = [], $activeNav = '', $brand = null): string
     {
         $active = null;
         $anchors = null;
         foreach ($navItems as $key => $value) {
             $display = $key;
             $href = $value;
-            $active = ($href === $viewsDir) ? 'active' : '';
+            $active = ($href === $activeNav) ? 'active' : null;
             // generate an anchor for each 'nav-item'
             $anchor = <<<HEREDOC
 <a class = "nav-link $active"  href="$href">$display</a>\r\n
@@ -1484,33 +1500,45 @@ HEREDOC;
     }
 
     /**
-     * alerts
-     * @param string $type 'info', 'primary', 'secondary', 'warning', 'danger', 'success', 'light'
-     * @param string $msg the message to be displayed in the alert box (use markup to <strong> or <bold> or <href> other)
-     * @param boolean $dismiss if set to false, the alert box will not have a 'x' dismiss button, it cannot be dismissed.
+     * BootWrap::alert() wraps BootStrap alert component
+     * use it to provide contextual feedback messages for typical user actions
+     *
+     * @param string   $msg     : the message to be displayed in the alert box
+     * @param string   $type    : 'info', 'primary', 'secondary', 'warning', 'danger', 'success', 'light'
+     * @param bool     $dismiss : if set to false, the alert cannot be dismissed.
+     * @param int|null $zIndex  : overlapping elements with a larger z-index cover those with a smaller one.
+     *
+     * @return string           : alert-html
      */
-    public function alert($type = 'info', $msg = null, $zIndex = false, $dismiss = true)
+    public function alert(string $msg = '', string $type = 'info', bool $dismiss = true, int $zIndex = null): string
     {
         $buttonHtml = <<<HEREDOC
         <button type="button" class="close" data-dismiss="alert">&times;</button>
 HEREDOC;
         $dismissable = ($dismiss === true) ? "alert-dismissible" : '';
         $button = ($dismiss === true) ? $buttonHtml : '';
-        $z = ($zIndex !== false) ? "style='z-index: $zIndex;'" : '';
+        $z = ($zIndex !== null) ? "style='z-index: $zIndex;'" : '';
         $alertHtml = <<<HEREDOC
-            <div class="bs-component col-sm-10">
-              <div class="alert $dismissable alert-$type" $z>
+              <div class="bs-component col-sm-10 alert $dismissable alert-$type" $z>
                 $button
                 $msg
               </div>
-            </div>
 HEREDOC;
-
         return $alertHtml;
     }
 
-    public function jumbotron($title = null, $subTitle = null, $msg = null, $buttonDisplay = null)
+    /**
+     * @param null|string $title
+     * @param null|string $subTitle
+     * @param null|string $msg
+     * @param null|string $buttonDisplay
+     *
+     * @return string : jumbotron-html ready for echoing
+     */
+    public function jumbotron($title = null, $subTitle = null, $msg = null, $buttonDisplay = null): string
     {
+        $jumbotronHtml = '';
+
         $jumbotronOpen = <<<HEREDOC
         <div class="jumbotron">
             <h1 class="display-3">$title</h1>
@@ -1536,10 +1564,25 @@ HEREDOC;
         return $jumbotronHtml;
     }
 
-    public function card($title = null, $msg = null, $class = 'primary', $list = [], $links = [], $blank = false, $image = null, $footer = null)
+    /**
+     * BootWrap::card() wraps BootStrap card component
+     * cards provide a flexible and extensible content container with multiple variants and options.
+     *
+     * @param string|null   $title
+     * @param string|null   $msg
+     * @param string        $class
+     * @param array         $list
+     * @param array         $links
+     * @param bool          $blank
+     * @param array|null    $image
+     * @param string|null   $footer
+     *
+     * @return string                   : card-html
+     */
+    public function card($title = null, $msg = null, $class = 'primary', $list = [], $links = [], $blank = false, $image = [], $footer = null): string
     {
         $cardImg = <<<HEREDOC
-        <img class="card-img-top" src="$image" alt="Card image cap">
+        <img class="card-img-top" src="$image[0]" style = "width: $image[1]%;" alt="card image cap">
 HEREDOC;
 
         $image = ($image !== null) ? $cardImg : '';
@@ -1620,5 +1663,3 @@ HEREDOC;
         return $cardHtml;
     }
 }
-
-?>

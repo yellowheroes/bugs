@@ -18,7 +18,7 @@ RewriteEngine On
 # PRODUCTION environment
 #RewriteBase /
 # DEVELOPMENT environment
-RewriteBase /edsa-coding/projects/templates/base0/
+RewriteBase /projects/templates/base0/
 
 #RewriteConditions - i.e. do not rewrite URL
 #if requested URL path is an existing file, a directory or a dynamic link
@@ -31,5 +31,6 @@ RewriteCond %{REQUEST_FILE} !-l
 # i.e. only our routes need rewriting to 'src/app/index.php?url='
 RewriteCond %{REQUEST_URI} !^.*/src/system/.*$ [NC]
 RewriteRule ^(.+)$ src/app/index.php?url=$1 [QSA,L]
-# PRODUCTION environment: projectname === the folder on web-host where the application sits
-#RewriteRule ^(.+)$ projectname/src/app/index.php?url=$1 [QSA,L]
+# PRODUCTION environment: add the APPFOLDER - the folder on web-host where the application sits
+# i.e. RewriteRule ^(.+)$ APPFOLDER/src/app/index.php?url=$1 [QSA,L]
+# e.g. APPFOLDER is 'jimmy': RewriteRule ^(.+)$ jimmy/src/app/index.php?url=$1 [QSA,L]

@@ -1,7 +1,7 @@
 <?php
-namespace yellowheroes\projectname\system\mvc\views;
+namespace yellowheroes\jimmy\system\mvc\views;
 
-use yellowheroes\projectname\system\config as config;
-use yellowheroes\projectname\system\libs as libs;
+use yellowheroes\jimmy\system\config as config;
+use yellowheroes\jimmy\system\libs as libs;
 
-echo $bootWrap->jumbotron('projectname', 'a cool, bare bones blog engine', '');
+echo $bootWrap->jumbotron('Jimmy', 'a cool, bare bones blog engine', '');

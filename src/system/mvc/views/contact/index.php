@@ -1,8 +1,8 @@
 <?php
-namespace yellowheroes\projectname\system\mvc\views;
+namespace yellowheroes\jimmy\system\mvc\views;
 
-use yellowheroes\projectname\system\mvc\models as models;
-use yellowheroes\projectname\system\libs as libs;
+use yellowheroes\jimmy\system\mvc\models as models;
+use yellowheroes\jimmy\system\libs as libs;
 
 /**
  * card with contact details

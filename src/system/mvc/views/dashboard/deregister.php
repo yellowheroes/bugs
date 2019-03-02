@@ -1,10 +1,10 @@
 <?php
 
-namespace yellowheroes\projectname\system\mvc\views;
+namespace yellowheroes\jimmy\system\mvc\views;
 
-use yellowheroes\projectname\system\config as config;
-use yellowheroes\projectname\system\mvc\models as models;
-use yellowheroes\projectname\system\libs as libs;
+use yellowheroes\jimmy\system\config as config;
+use yellowheroes\jimmy\system\mvc\models as models;
+use yellowheroes\jimmy\system\libs as libs;
 
 /**
  * check if user is logged-in and has appropriate (admin) priviliges
@@ -29,7 +29,7 @@ if ($userType !== 'admin') {
  */
 $msg = 'Remove a user account';
 echo "<div class='row' style='margin-left: -15px; font-size: 1.5em;'>";
-echo $bootWrap->alert('primary', $msg, false, false); // alert is not dismissable, it's a title/header in this case
+echo $bootWrap->alert($msg, 'primary', false, null); // alert is not dismissable, it's a title/header in this case
 echo "</div>";
 
 /**
@@ -51,19 +51,19 @@ $userNames = $model->getUsers(); // returns all the user names in the database '
 $inputFields = [
     ['select', 'username', 'username', "", '', 'User name', $userNames]
 ];
-// form($inputFields = [], $submitDisplay = 'submit', $method = 'POST', $action = "#", $formId = "formId", $backHref = false, $confirmationDialog = [false, true])
-$form = $bootWrap->form($inputFields, 'delete', $method = 'POST', $action = "#", $formId = "deregisterUser", $backHref = false, $confirmationDialog = [true, false]); // we substitute the 'submit' button with a BootWrap::confirmationDialog() button
+//$confirmationDialog[true, false] means we want a confirmationDialog(true) and a button (false) - if want a href text, set second bool to true as well.
+$form = $bootWrap->form($inputFields, 'delete', $method = 'POST', $action = "#", $formId = "deregisterUser", $backHref = false, $backDisplay = 'Back', $confirmationDialog = [true, false]); // we substitute the 'submit' button with a BootWrap::confirmationDialog() button
 echo $form;
-/** we use a confirmation dialog for this action, hence $_POST['confirm'] */
+// the submit button 'name'-field of the confirmation dialog is 'confirm' by default
 if (isset($_POST['confirm'])) {
     $deregistration = (new models\LoginModel())->deregisterUser();
     if ($deregistration[0] !== false) {
         $msg = $deregistration[1];
-        $alert = (new libs\BootWrap())->alert('success', $msg);
+        $alert = (new libs\BootWrap())->alert($msg, 'success');
         echo $alert;
     } elseif ($deregistration[0] === false) {
         $msg = $deregistration[1];
-        $alert = (new libs\BootWrap())->alert('warning', $msg);
+        $alert = (new libs\BootWrap())->alert($msg, 'warning');
         echo $alert;
     }
 }

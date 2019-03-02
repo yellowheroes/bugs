@@ -1,7 +1,7 @@
 <?php
-namespace yellowheroes\projectname\system\mvc\controllers;
+namespace yellowheroes\jimmy\system\mvc\controllers;
 
-use yellowheroes\projectname\system\libs as libs;
+use yellowheroes\jimmy\system\libs as libs;
 
 class Contact extends libs\CoreController
 {

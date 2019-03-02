@@ -12,6 +12,9 @@ class Config
     
     /** session configuration */
     public $sessionConfig = [];
+
+    /* your company / organisation / brand */
+    const ORGNAME = "Yellow Heroes";            // set your company (brand) or organisation name
     
     /* production environment */
     const PRODUCTION = false; // set to true in PRODUCTION environment
@@ -158,7 +161,7 @@ class Config
         } else {
             $root = $requestScheme . "://" . $domainName . "/" .
                     $scriptName[1] . "/" . $scriptName[2] . "/" .
-                    $scriptName[3] . "/" . $scriptName[4] . "/"; // e.g. 127.0.0.1/edsa-coding/PROJECTS/development/MVCbaseflat/
+                    $scriptName[3] . "/"; // . $scriptName[4] . "/"; // e.g. 127.0.0.1/edsa-coding/PROJECTS/development/MVCbaseflat/
         }
 
         return $root;

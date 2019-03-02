@@ -1,8 +1,8 @@
 <?php
-namespace yellowheroes\projectname\system\mvc\views;
+namespace yellowheroes\jimmy\system\mvc\views;
 
-use yellowheroes\projectname\system\mvc\models as models;
-use yellowheroes\projectname\system\libs as libs;
+use yellowheroes\jimmy\system\mvc\models as models;
+use yellowheroes\jimmy\system\libs as libs;
 
 /**
  * Bootwrap::form($inputFields = [], $submitDisplay = 'submit', $method = 'POST', $action = "#")
@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
         exit(); // terminate script mvc/views/login/index.php
     } else {
         $msg = $credentials[1];
-        $alert = (new libs\BootWrap())->alert('warning', $msg);
+        $alert = (new libs\BootWrap())->alert($msg, 'warning');
         echo $alert;
     }
 }

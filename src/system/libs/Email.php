@@ -2,12 +2,12 @@
 namespace yellowheroes\jimmy\system\libs;
 
 /**
- * Use class Mailer to send e-mails - only works in PRODUCTION - our local host does not have SMTP ini set correctly
+ * Use class Email to send e-mails - only works in PRODUCTION - our local host does not have SMTP ini set correctly
  * 
  * Alternatively, use PHPMailer/PHPMailer (https://github.com/PHPMailer/PHPMailer/blob/_master/examples/gmail.phps)
  */
 
-class Mailer
+class Email
 {
     public $from = "admin@yellowheroes.com";
     public $headers = [];
