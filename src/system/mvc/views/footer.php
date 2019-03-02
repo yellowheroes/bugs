@@ -1,8 +1,8 @@
 <?php
-namespace yellowheroes\jimmy\system\mvc\views;
+namespace yellowheroes\projectname\system\mvc\views;
 
-use yellowheroes\jimmy\system\config as config;
-use yellowheroes\jimmy\system\libs as libs;
+use yellowheroes\projectname\system\config as config;
+use yellowheroes\projectname\system\libs as libs;
 
 $footer = new libs\BootWrap();
 /* other is anything that comes after </body> element */

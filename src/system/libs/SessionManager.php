@@ -3,9 +3,9 @@
  * class SessionManager is inspired by: http://blog.teamtreehouse.com/how-to-create-bulletproof-sessions
  * - function 'migrate' is heavily based off of static function regenerateSession()
  */
-namespace yellowheroes\jimmy\system\libs;
+namespace yellowheroes\projectname\system\libs;
 
-use yellowheroes\jimmy\system\config as config;
+use yellowheroes\projectname\system\config as config;
 
 class SessionManager
 {

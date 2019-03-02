@@ -1,8 +1,8 @@
 <?php
-namespace yellowheroes\jimmy\system\mvc\views;
+namespace yellowheroes\projectname\system\mvc\views;
 
-use yellowheroes\jimmy\system\mvc\models as models;
-use yellowheroes\jimmy\system\libs as libs;
+use yellowheroes\projectname\system\mvc\models as models;
+use yellowheroes\projectname\system\libs as libs;
 
 /**
  * Bootwrap::form($inputFields = [], $submitDisplay = 'submit', $method = 'POST', $action = "#")

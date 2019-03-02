@@ -1,8 +1,8 @@
 <?php
-namespace yellowheroes\jimmy\system\mvc\views;
+namespace yellowheroes\projectname\system\mvc\views;
 
-use yellowheroes\jimmy\system\config as config;
-use yellowheroes\jimmy\system\libs as libs;
+use yellowheroes\projectname\system\config as config;
+use yellowheroes\projectname\system\libs as libs;
 
 /**
  * start a secure session (or continue with started session)
@@ -297,9 +297,9 @@ $logStatus = $session->get('log-status'); // returns array with 3 elements: BOOL
  * we insert an array to create a 'dashboard' dropdown menu
  * a divider (grey horizontal ruler) is inserted with ''=>'' as $key=>$value (see below)
  */
-$guest = ['home' => $index, 'blog' => $blog, 'contact' => $contact, 'login' => $login]; // guest only has access to 'shared' blog
-$editor = ['home' => $index, 'blog' => $blog, 'quill' => $quill, 'chat' => $chat, 'contact' => $contact, 'logout' => $logout];
-$admin = ['home' => $index, 'blog' => $blog, 'quill' => $quill, 'chat' => $chat, 'contact' => $contact,
+$guest = ['home' => $index, 'contact' => $contact, 'login' => $login]; // guest only has access to 'shared' blog
+$editor = ['home' => $index, 'contact' => $contact, 'logout' => $logout];
+$admin = ['home' => $index, 'contact' => $contact,
         'admin' => ['register new user' => $register,
                     'remove existing user' => $deregister, 'hr1' => '',
                     'create new blog' => $createblog,

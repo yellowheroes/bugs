@@ -12,7 +12,7 @@
  * echo '</pre>';
  * 
  */
-namespace yellowheroes\jimmy\system\libs;
+namespace yellowheroes\projectname\system\libs;
 
 class Purify
 {

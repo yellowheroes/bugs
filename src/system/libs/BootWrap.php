@@ -1,8 +1,8 @@
 <?php
 
-namespace yellowheroes\jimmy\system\libs;
+namespace yellowheroes\projectname\system\libs;
 
-use yellowheroes\jimmy\system\config as config;
+use yellowheroes\projectname\system\config as config;
 
 /**
  * Class BootWrap

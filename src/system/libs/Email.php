@@ -1,5 +1,5 @@
 <?php
-namespace yellowheroes\jimmy\system\libs;
+namespace yellowheroes\projectname\system\libs;
 
 /**
  * Use class Email to send e-mails - only works in PRODUCTION - our local host does not have SMTP ini set correctly

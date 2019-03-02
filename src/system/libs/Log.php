@@ -1,5 +1,5 @@
 <?php
-namespace yellowheroes\jimmy\system\libs;
+namespace yellowheroes\projectname\system\libs;
 
 /**
  * Use class Log to keep logs
