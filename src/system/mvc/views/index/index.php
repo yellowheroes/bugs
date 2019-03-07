@@ -1,7 +1,7 @@
 <?php
-namespace yellowheroes\projectname\system\mvc\views;
+namespace yellowheroes\bugs\system\mvc\views;
 
-use yellowheroes\projectname\system\config as config;
-use yellowheroes\projectname\system\libs as libs;
+use yellowheroes\bugs\system\config as config;
+use yellowheroes\bugs\system\libs as libs;
 
-echo $bootWrap->jumbotron('Base0', 'a MVC skeleton to quickly bang together a small web application', '');
+echo $bootWrap->jumbotron('Bugs', 'a no-nonsense bug tracker', '');

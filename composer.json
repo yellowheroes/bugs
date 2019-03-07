@@ -17,7 +17,7 @@
   ],
   "_comment": [
     {
-      "remark1": "projectname in development",
+      "remark1": "bugs in development",
       "remark2": "no error / exception handling",
       "remark3": "unstable",
       "remark4": "uses Flintstone for flat-file database transactions"
@@ -31,7 +31,7 @@
   },
   "autoload": {
     "psr-4": {
-      "yellowheroes\\projectname\\": "src/"
+      "yellowheroes\\bugs\\": "src/"
     }
   }
 }

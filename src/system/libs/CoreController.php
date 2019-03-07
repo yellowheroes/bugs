@@ -1,5 +1,5 @@
 <?php
-namespace yellowheroes\projectname\system\libs;
+namespace yellowheroes\bugs\system\libs;
 
 class CoreController
 {
@@ -13,7 +13,7 @@ class CoreController
     {
         // instantiate CORE VIEW - store CORE VIEW object in property $view
         $this->view = new CoreView();
-        // connect to all available flat file databases and start session
+        // connect to database and start session
         $this->model = new CoreModel();
     }
 }

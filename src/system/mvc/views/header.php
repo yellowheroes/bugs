@@ -1,8 +1,8 @@
 <?php
-namespace yellowheroes\projectname\system\mvc\views;
+namespace yellowheroes\bugs\system\mvc\views;
 
-use yellowheroes\projectname\system\config as config;
-use yellowheroes\projectname\system\libs as libs;
+use yellowheroes\bugs\system\config as config;
+use yellowheroes\bugs\system\libs as libs;
 
 /**
  * start a secure session (or continue with started session)
@@ -54,7 +54,7 @@ $logout = $config->path['logout'];
 /**
  * careful some of these variables are used by CkEditor now (e.g. $delete)
  */
-//$crud = $config->path['crud'];
+$crud = $config->path['crud'];
 //$create = $config->path['create'];
 //$delete = $config->path['delete'];
 //$read = $config->path['read'];
@@ -298,8 +298,8 @@ $logStatus = $session->get('log-status'); // returns array with 3 elements: BOOL
  * a divider (grey horizontal ruler) is inserted with ''=>'' as $key=>$value (see below)
  */
 $guest = ['home' => $index, 'contact' => $contact, 'login' => $login]; // guest only has access to 'shared' blog
-$editor = ['home' => $index, 'contact' => $contact, 'logout' => $logout];
-$admin = ['home' => $index, 'contact' => $contact,
+$editor = ['home' => $index, 'crud' => $crud, 'contact' => $contact, 'logout' => $logout];
+$admin = ['home' => $index, 'crud' => $crud, 'contact' => $contact,
         'admin' => ['register new user' => $register,
                     'remove existing user' => $deregister, 'hr1' => '',
                     'create new blog' => $createblog,

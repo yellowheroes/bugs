@@ -1,9 +1,9 @@
 <?php
 
-namespace yellowheroes\projectname\system\mvc\models;
+namespace yellowheroes\bugs\system\mvc\models;
 
-use yellowheroes\projectname\system\config as config;
-use yellowheroes\projectname\system\libs as libs;
+use yellowheroes\bugs\system\config as config;
+use yellowheroes\bugs\system\libs as libs;
 
 class LoginModel extends libs\CoreModel
 {

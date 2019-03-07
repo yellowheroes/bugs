@@ -1,5 +1,5 @@
 <?php
-namespace yellowheroes\projectname\system\libs;
+namespace yellowheroes\bugs\system\libs;
 
 use \PDO;
 
@@ -35,7 +35,7 @@ class DbConnect
     /** we set defaults: type 'mysql', host '127.0.0.1', user 'root', passWord ''
     * so we only have to set database name
     */
-    public function __construct($dbName=null, $type='mysql', $host='127.0.0.1', $user='root', $passWord=null)
+    public function __construct($dbName=null, $type='mysql', $host='localhost', $user='root', $passWord=null)
     {
         switch ($type) {
             case "mysql":

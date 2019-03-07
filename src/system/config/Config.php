@@ -1,5 +1,5 @@
 <?php
-namespace yellowheroes\projectname\system\config;
+namespace yellowheroes\bugs\system\config;
 
 /**
  * DEVELOPMENT ENVIRONMENT
@@ -22,7 +22,7 @@ class Config
      *  psr-4 autoloader: "yellowheroes\\projectname\\": "src/"
      *  as this is used in all namespaces.
      */
-    const PROJECTNAME = 'projectname'; // make sure project-name === project-name used in composer.json autoloader setting.
+    const PROJECTNAME = 'bugs'; // make sure project-name === project-name used in composer.json autoloader setting.
 
     /* turn routes logging on(true) / off(false) */
     const LOGROUTES = false;                    // default off (false)
@@ -45,11 +45,21 @@ class Config
     const FF_settings = 'settings';     // file: settings.yel - any settings data
     const FF_users = '_users';           // file: _users.yel - system-database with user credentials
 
+    //MySQL database 'bugs'
+    const DB_NAME = 'bugs';
+    const DB_TYPE = 'mysql';
+    const DB_HOST = 'localhost';
+    const DB_USER = 'root';
+    const DB_PASS = 'admin';
+
+    //const TBL_CRUD = 'mvc_crud';
+    const TBL_JIMMY = 'jimmy'; // the bug tracker db-table for project Jimmy
+
     /**
      * Bootswatch themes (21): cerulean, cosmo, cyborg, darkly, flatly, journal, litera, lumen, lux, materia, minty,
      * pulse, sandstone, simplex, sketchy, slate, solar, spacelab, superhero, united, yeti
      */
-    const BOOTSWATCH_THEME = 'slate';
+	const BOOTSWATCH_THEME = 'slate';
 
     /**
      * Google font API - https://developers.google.com/fonts/docs/getting_started
@@ -164,7 +174,7 @@ class Config
         } else {
             $root = $requestScheme . "://" . $domainName . "/" .
                 $scriptName[1] . "/" . $scriptName[2] . "/" .
-                $scriptName[3] . "/"; // . $scriptName[4] . "/"; // e.g. http://localhost/projects/development/jimmy/
+                $scriptName[3] . "/" . $scriptName[4] . "/"; // e.g. http://localhost/projects/development/jimmy/
         }
 
         return $root;

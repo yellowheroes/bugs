@@ -1,8 +1,8 @@
 <?php
 
-namespace yellowheroes\projectname\system\libs;
+namespace yellowheroes\bugs\system\libs;
 
-use yellowheroes\projectname\system\config as config;
+use yellowheroes\bugs\system\config as config;
 
 /**
  * Class BootWrap
@@ -643,10 +643,10 @@ HEREDOC;
             $type = $value[0] ?? "";
             $name = $value[1] ?? "";
             $id = $value[2] ?? $name; // if id is not set, then set it equal to $name
-            $fieldValue = $value[3] ?? ""; // can be useful to set initial value or for hidden form fields where a field value can be carried-over to next page
+            $fieldValue = $value[3] ?? ""; // can be useful to set initial value for textarea or for hidden form fields where a field value can be carried-over to next page
             $placeholder = $value[4] ?? "";
             $label = ($type !== 'hidden') ? $value[5] : "";
-            $options = $value[6] ?? null; // $value[5] contains an array with options(for e.g. to set 'required' or for select or radio buttons)
+            $options = $value[6] ?? null; // $value[6] contains an array with options(for e.g. to set 'required' or for select or radio buttons)
 
             /** type: text or password or email */
             if ($type === 'text' || $type === 'password' || $type === 'email' || $type === 'hidden') {
@@ -659,6 +659,18 @@ HEREDOC;
             <input type="$type" class="form-control" name="$name" id="$id" value="$fieldValue" placeholder="$placeholder" $options[0]>
             </div>
         </div>\n
+HEREDOC;
+            }
+
+            /* type textarea */
+            if($type === 'textarea') {
+                $formFields .= <<<HEREDOC
+        <div class="form-group" $style>
+            <label for="$id" class="col-sm-2 control-label">$label</label>
+            <div class="col-sm-10">
+            <textarea class="form-control" id="$id" name="$name" rows="10" $options[0]>$fieldValue</textarea>
+            </div>
+        </div>
 HEREDOC;
             }
 

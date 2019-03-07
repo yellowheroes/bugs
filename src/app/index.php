@@ -7,10 +7,10 @@
  * Date: 26/11/2018
  * Time: 00:18
  */
-namespace yellowheroes\projectname\app;
+namespace yellowheroes\bugs\app;
 
-use yellowheroes\projectname\system\libs as libs;
-use yellowheroes\projectname\system\mvc\controllers as controllers;
+use yellowheroes\bugs\system\libs as libs;
+use yellowheroes\bugs\system\mvc\controllers as controllers;
 
 /*
  * activate Composer autoloading

@@ -1,5 +1,5 @@
 <?php
-namespace yellowheroes\projectname\system\libs;
+namespace yellowheroes\bugs\system\libs;
 
 use \PDO;
 
@@ -13,42 +13,20 @@ use \PDO;
  */
 class DbQuery
 {
-
-    public $queryResultArray = [];
-
-    public function doVerifyLogin($connection, $sql, $user = null)
-    {
-        if (is_object($connection)) {
-            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $stmt = $connection->prepare($sql);
-            $stmt->bindParam(':param1', $user);
-            //$stmt->bindParam(':param2', $passWord);
-
-            $stmt->execute();
-            /** $data === false in case the given credentials are wrong/non-existant */
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-            $connection = null;
-            if ($data !== false) {
-                return $data;
-            } else {
-                return false;
-            }
-        }
-    }
-
     /**
      * @doInsert
-     *
+     * example - a valid INSERT query:
+     * INSERT INTO `jimmy` (`id`, `new`, `accepted`, `in progress`, `awaiting validation`, `fixed`) VALUES (NULL, 'some bug report', '', '', '', '');
      */
-    public function doInsert($connection, $sql, $arg1 = null, $arg2 = null, $arg3 = null)
+    public function doInsert($connection, $sql, $status = "", $title = "", $description = "")
     {
         if (is_object($connection)) {
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             $stmt = $connection->prepare($sql);
-            $stmt->bindParam(':param1', $arg1);
-            $stmt->bindParam(':param2', $arg2);
-            //$stmt->bindParam(':param3', $arg3);
+            $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':title', $title);
+            $stmt->bindValue(':description', $description);
+
             // insert a row
             $stmt->execute();
             $connection = null;
@@ -60,19 +38,18 @@ class DbQuery
      * @doUpdate (normally happens on reference 'id' in database, i.e. WHERE 'id' = :param1)
      *
      */
-    public function doUpdate($connection, $sql, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null)
+    public function doUpdate($connection, $sql, $id = "", $status = "", $title = "", $description = "")
     {
         if (is_object($connection)) {
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             // prepare sql and bind parameters
             // use backticks ` when referencing a column heading with spaces in MySQL table, e.g. first <space> name, or last <space> name
             $stmt = $connection->prepare($sql);
-            $stmt->bindParam(':param1', $arg1);
-            $stmt->bindValue(':param2', $arg2);
-            $stmt->bindValue(':param3', $arg3);
-            //$stmt->bindValue(':param4', $arg4);
-            //$stmt->bindValue(':param5', $arg5);
-            // insert a row
+            $stmt->bindParam(':id', $id); // id
+            $stmt->bindParam(':status', $status); // status
+            $stmt->bindParam(':title', $title); // title
+            $stmt->bindValue(':description', $description); // accepted
+            // update a row
             $stmt->execute();
             $connection = null;
             return;
@@ -88,7 +65,7 @@ class DbQuery
         if (is_object($connection)) {
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt = $connection->prepare($sql);
-            $stmt->bindParam(':param1', $id);
+            $stmt->bindParam(':id', $id);
 
             // delete a row
             $stmt->execute();
@@ -119,7 +96,7 @@ class DbQuery
         if (is_object($connection) && $id !== null) {
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt = $connection->prepare($sql);
-            $stmt->bindParam(':param1', $id);
+            $stmt->bindParam(':id', $id);
             $stmt->execute();
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
             $connection = null;

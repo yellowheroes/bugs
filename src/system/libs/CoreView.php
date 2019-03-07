@@ -1,7 +1,7 @@
 <?php
-namespace yellowheroes\projectname\system\libs;
+namespace yellowheroes\bugs\system\libs;
 
-use yellowheroes\projectname\system\config as config;
+use yellowheroes\bugs\system\config as config;
 
 /**
  * DEVELOPMENT ENVIRONMENT

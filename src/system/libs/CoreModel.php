@@ -1,7 +1,7 @@
 <?php
-namespace yellowheroes\projectname\system\libs;
+namespace yellowheroes\bugs\system\libs;
 
-use yellowheroes\projectname\system\config as config;
+use yellowheroes\bugs\system\config as config;
 
 /**
  * CoreModel connects to all available flat-file databases
@@ -13,6 +13,9 @@ class CoreModel
 
     // FlatFileDb object
     public $db = null;
+    // MySQL database connection - the bug-tracker db */
+    public $pdo = null;
+
     // session manager object
     public $session = null;
     // our flat-file database connections
@@ -22,10 +25,12 @@ class CoreModel
 
     public function __construct()
     {
+        /* start session */
         $this->session = new SessionManager(); // instantiate a session manager object
         $this->session->start(); // start a session
 
-        $invoke = $this->dbConnect(null, null, true); // connect to default (system) databases
+        /* connect to default Flintstone flat-file db's and the MySQL bugs database */
+        $this->dbConnect(null, null, true);
     }
 
     public function dbConnect($dbName = null, $dbDir = null, $setDflts = false)
@@ -33,14 +38,23 @@ class CoreModel
         $this->db = new FlatFileDb();
         $connection = ($dbName !== null) ? $this->db->connect($dbName, $dbDir) : null;
 
-        /** connect to default databases only when setDflts === true */
+        /** connect to default flat-file databases only when setDflts === true */
         if ($setDflts === true) {
             $this->usersDb = $this->db->connect(config\Config::FF_users);
             $this->sessionDb = $this->db->connect(config\Config::FF_session);
             $this->settingsDb = $this->db->connect(config\Config::FF_settings);
         }
 
-        return $connection; // return a Flintstone database object, or null
+        /* connect to MySQL database - the bug tracker database */
+        $dbName = config\Config::DB_NAME;
+        $type   = config\Config::DB_TYPE;
+        $host   = config\Config::DB_HOST;
+        $user   = config\Config::DB_USER;
+        $pass   = config\Config::DB_PASS;
+
+        $connection = new DbConnect($dbName, $type, $host, $user, $pass); // connect to MySQL database (the bug tracker db)
+        $this->pdo = $connection->pdo;
+
     }
 
     /**

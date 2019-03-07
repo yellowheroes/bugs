@@ -18,7 +18,7 @@ RewriteEngine On
 # PRODUCTION environment
 #RewriteBase /
 # DEVELOPMENT environment
-RewriteBase /projects/templates/base0/
+RewriteBase /projects/z_other/testbed/bugs/
 
 #RewriteConditions - i.e. do not rewrite URL
 #if requested URL path is an existing file, a directory or a dynamic link
