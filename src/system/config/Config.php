@@ -174,7 +174,7 @@ class Config
         } else {
             $root = $requestScheme . "://" . $domainName . "/" .
                 $scriptName[1] . "/" . $scriptName[2] . "/" .
-                $scriptName[3] . "/" . $scriptName[4] . "/"; // e.g. http://localhost/projects/development/jimmy/
+                $scriptName[3] . "/"; // . $scriptName[4] . "/"; // e.g. http://localhost/projects/development/bugs/
         }
 
         return $root;
