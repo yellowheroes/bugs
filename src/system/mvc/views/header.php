@@ -69,12 +69,12 @@ $styleSheets = [$fontAwesomeCss, $googleFontsCss, $stickyFooter, $bootSwatchCss,
 
 /*
  * Javascript / jQuery (plugins)
- * - Prism: syntax highlighting (we still use Prism in Repository, but should change to higlight.js - as used in Quill Editor)
+ * - Prism: syntax highlighting (should change to higlight.js)
  * - Bootstrap tooltips
  * - Bootstrap dropdowns
  */
 
-$syntaxHiglight = <<<HEREDOC
+$syntaxHighlight = <<<HEREDOC
 <!-- START - Use Prism for syntax higlighting code in our repository -->
         <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.7.1/dist/clipboard.min.js"></script>
         <script src="$javascript/prism.js"></script>
@@ -186,7 +186,7 @@ HEREDOC;
  * generate the html <head> </head> block
  */
 $bootWrap = new libs\BootWrap();
-$setJs = $bootWrap->setJs([$toolTips, $dropDowns, $anchors, $scrollToTop]);
+$setJs = $bootWrap->setJs([$syntaxHighlight, $toolTips, $dropDowns, $anchors, $scrollToTop]);
 $setOther = $bootWrap->setOther($favicon);
 $tabTitle = config\Config::ORGNAME;
 /*
