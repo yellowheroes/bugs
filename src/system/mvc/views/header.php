@@ -16,7 +16,7 @@ $session->start();
  */
 $config = new config\Config(true);
 
-/**
+/*
  * get access to all flat file databases
  * by instantiating the CoreModel
  */
@@ -28,57 +28,25 @@ $settingsDb = $db->settingsDb;  // connection to flat-file database 'settings'
 $css = $config->path['css'];
 $javascript = $config->path['javascript'];
 $images = $config->path['images'];
-$ssechat = $config->path['ssechat'] . "/ssechat.php";
 
 //paths to view-dirs and view-pages - used in hrefs
+$root = $config->path['root'];
 $index = $config->path['index'];    // home
-$blog = $config->path['blog'];      // blog
-$quill = $config->path['quill'];    // ckeditor
-$edit = $config->path['editarticle'];
-$delete = $config->path['deletearticle'];
-$store = $config->path['storearticle']; // Quill::store(), invoking in turn, QuillModel::storeQuillContent()
-
-$chat = $config->path['chat']; // chat box
-$storechat = $config->path['storechat'];
-$updatechat = $config->path['updatechat'];
-
 $contact = $config->path['contact'];    // contact
 $dashboard = $config->path['dashboard'];    // admin
 $register = $config->path['register']; // add a new user account
 $deregister = $config->path['deregister']; // remove an existing user account
-$createblog = $config->path['createblog'];
-$deleteblog = $config->path['deleteblog'];
 $login = $config->path['login'];
 $logout = $config->path['logout'];
 
 /**
- * careful some of these variables are used by CkEditor now (e.g. $delete)
+ * the CRUD functionality for bugs management
  */
 $crud = $config->path['crud'];
-//$create = $config->path['create'];
-//$delete = $config->path['delete'];
-//$read = $config->path['read'];
-//$update = $config->path['update'];
 
-$root = $config->path['root'];
-
-/**
- * render html head-block Bootstrap compliant
- * - CSS
- * - Javascript / jQuery (libs/plugins)
- * - Other
- */
-/**
- * CSS
- *
- * Bootswatch themes -  there are currently 21 themes
- *                      user type 'admin' can select to change theme in dashboard
- *                      the theme is recorded in a session variable
- *                      the default theme is recorded in a constant in config\Config::BOOTSWATCH_THEME
- */
 $bootSwatchTheme = config\Config::BOOTSWATCH_THEME;
 $bootSwatchCss = "https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/" . $bootSwatchTheme . "/bootstrap.min.css";
-//$bootstrapCustomizeCss = $css . '/customize-bootstrap.css';
+
 $fontAwesomeCss = <<<HEREDOC
 https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous
 HEREDOC;
@@ -86,7 +54,7 @@ HEREDOC;
 $superCss = $css . '/super.css';
 $stickyFooter = $css . '/sticky-footer-navbar.css';
 $scrollToTopCss = $css .'/scroll-to-top.css';
-    /**
+/*
  * We use Google Font API to allow for setting a font with in-line css on DOM elements (see e.g. view-page blog/index.php)
  * To request multiple font families, separate the names with a pipe character (|). Use a + sign if space in name.
  * For example, to request the fonts Tangerine, Inconsolata, and Droid Sans:
@@ -99,39 +67,12 @@ $blogFontSize = "16px";
 $googleFontsCss = "https://fonts.googleapis.com/css?family={$googleFontFamily}:{$googleFontWeight}";
 $styleSheets = [$fontAwesomeCss, $googleFontsCss, $stickyFooter, $bootSwatchCss, $superCss, $scrollToTopCss];
 
-/**
+/*
  * Javascript / jQuery (plugins)
  * - Prism: syntax highlighting (we still use Prism in Repository, but should change to higlight.js - as used in Quill Editor)
- * - Quill: rich text editor
  * - Bootstrap tooltips
- * - $chatRefresh - refesh the chat box every 2 or 3 seconds (this script is only invoked in VIEW chat/index.php)
+ * - Bootstrap dropdowns
  */
-
-/*
- * use xhr AJAX polling
- */
-$chatRefresh = <<<HEREDOC
-<script>
-        function chatUpdate() {
-            var xhr = new XMLHttpRequest();
-            var updatechat = "$updatechat";
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    if(xhr.responseText != '') { /* empty response is sent back if no new chats were posted */
-                    document.getElementById('chatbox').innerHTML = xhr.responseText;
-                    }
-                }
-            }
-            xhr.open('GET', updatechat, true);
-            xhr.send();
-        }
-        setInterval(function () {
-            chatUpdate()
-        }, 3000)
-    </script>
-HEREDOC;
-$chatRefresh = ($viewsDir === 'chat') ? $chatRefresh : ''; // only invoke chat refresh script in VIEW chat/index.php
-
 
 $syntaxHiglight = <<<HEREDOC
 <!-- START - Use Prism for syntax higlighting code in our repository -->
@@ -141,16 +82,7 @@ $syntaxHiglight = <<<HEREDOC
         <!-- STOP - Use Prism for syntax higlighting code in our repository -->\n
 HEREDOC;
 
-$highlightJsTheme = config\Config::HIGHLIGHTJS_THEME;
-$textEditor = <<<HEREDOC
-<!-- START - ckeditor -->
-        <script src="$javascript/ckeditor/ckeditor.js"></script>
-		<link href="$javascript/ckeditor/plugins/codesnippet/lib/highlight/styles/atom-one-dark.css" rel="stylesheet">
-        <script src="$javascript/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-HEREDOC;
-
-/**
+/*
  * enable Bootstrap tooltips
  * use following in your <a> or <button> or <div> or <span> element to enable: 
  * data-toggle="tooltip" data-placement="auto" title="whatever text you wanna show"
@@ -175,8 +107,8 @@ $dropDowns = <<<HEREDOC
         <!-- STOP - enable Bootstrap dropdowns -->\n
 HEREDOC;
 
-/* smooth scroll to anchors in articles */
-$listOffset = 0; // we do NOT want scrolling in list-view (bug #0001)
+/* smooth scroll to anchors in content */
+$listOffset = 0; // we do NOT want scrolling in list-view
 $articleOffset = -150; // we DO want scrolling in article-view
 $offset = (isset($id)) ? $articleOffset : $listOffset; // if user selected an article, allow anchor scrolling.
 $anchors = <<<HEREDOC
@@ -184,17 +116,14 @@ $anchors = <<<HEREDOC
 $(document).ready(function(){
   // Add smooth scrolling to all links
   $("a").on('click', function(event) {
-
     // Make sure this.hash has a value before overriding default behavior
     if (this.hash !== "") {
       // Prevent default anchor click behavior
       event.preventDefault();
-
       // Store hash
       var hash = this.hash;
-
       // Using jQuery's animate() method to add smooth page scroll
-      // The optional number (3800) specifies the number of milliseconds it takes to scroll to the specified area
+      // The optional number (1000) specifies the number of milliseconds it takes to scroll to the specified area
       $('html, body, textarea').animate({
         scrollTop: $(hash).offset().top $offset
       }, 1000, function(){
@@ -245,7 +174,7 @@ $(document).ready(function(){
 </script>
 HEREDOC;
 
-/**
+/*
  * Other: set favicon
  */
 $logoImage = $images . '/yh_logo.png';
@@ -253,23 +182,23 @@ $favicon = <<<HEREDOC
 <link rel="icon" type="image/png" href="$logoImage" sizes="16x16" />
 HEREDOC;
 
-/**
+/*
  * generate the html <head> </head> block
  */
 $bootWrap = new libs\BootWrap();
-$setJs = $bootWrap->setJs([$textEditor, $toolTips, $dropDowns, $anchors, $scrollToTop, $chatRefresh]);
+$setJs = $bootWrap->setJs([$toolTips, $dropDowns, $anchors, $scrollToTop]);
 $setOther = $bootWrap->setOther($favicon);
 $tabTitle = config\Config::ORGNAME;
-/**
- * @var $headHtml all html content that sits between <head> ... </head> tags
+/*
+ * $headHtml : all html content that sits between <head> ... </head> tags
  */
 $headHtml = $bootWrap->head($tabTitle, $styleSheets);
 echo $headHtml;
 
-/**
- *                      IMPORTANT
+/*
+ *                                      IMPORTANT
  * 
- *              --- DETERMINE USER LOG-STATUS ---
+ *                          --- DETERMINE USER LOG-STATUS ---
  * 
  * We use class SessionManager to keep track of log-status - we currently have 3 user types:
  * - admin  = highest level privileges (ALL)
@@ -278,7 +207,7 @@ echo $headHtml;
  * 
  * Access Privileges:
  * 1. navigation bar composition depends on user type (access privileges)
- * 2. restricted-access view-pages we double-check if user has clearance (client can always insert a route manually)
+ * 2. restricted-access view-pages we double-check if user has clearance (user can always insert a route manually)
  * 
  * Log-Status is stored in $_SESSION['log-status']:   
  * ["log-status"]=>
@@ -290,7 +219,7 @@ echo $headHtml;
  */
 $logStatus = $session->get('log-status'); // returns array with 3 elements: BOOLEAN 'loggedin', STRING 'username' and STRING 'usertype'
 
-/**
+/*
  * set appropriate navigation buttons dependent on the user type: guest / editor / admin
  * 
  * re. admin account:
@@ -300,12 +229,12 @@ $logStatus = $session->get('log-status'); // returns array with 3 elements: BOOL
 $guest = ['home' => $index, 'contact' => $contact, 'login' => $login]; // guest only has access to 'shared' blog
 $editor = ['home' => $index, 'bugs' => $crud, 'contact' => $contact, 'logout' => $logout];
 $admin = ['home' => $index, 'bugs' => $crud, 'contact' => $contact,
-        'admin' => ['register new user' => $register,
-                    'remove existing user' => $deregister, 'hr1' => '',
-                    'create new blog' => $createblog,
-                    'delete blog' => $deleteblog, 'hr2' => '',
-                    'dashboard' => $dashboard],
-        'logout' => $logout];
+          'admin' => ['register new user' => $register,
+                      'remove existing user' => $deregister,
+                      'hr1' => '',
+                      'dashboard' => $dashboard],
+                      'logout' => $logout
+];
 
 $toolTip = [];
 if ($logStatus['loggedin']) {
@@ -327,12 +256,13 @@ if ($logStatus['loggedin']) {
     $toolTip[0] = 'you have access to public content only - you must be registered to login';
 }
 
-/**
+/*
  * set breadcrumbs (prepend variables with: 'bc')
- * we can retrieve $viewsDir and $page here as it is set as first argument in each controller invoking
+ * we can retrieve $viewsDir and $page here as they are
+ * arguments in each controller invoking:
  * $this->view->render($viewsDir, $page, $id);
  */
-$bcViewsDir = ($viewsDir !== 'index') ? (($viewsDir !== 'crud') ? $viewsDir : 'bugs') : 'home'; // because we call index 'home' and crud 'bug monitor'
+$bcViewsDir = ($viewsDir !== 'index') ? (($viewsDir !== 'crud') ? $viewsDir : 'bugs') : 'home'; // because we call index 'home' and crud 'bugs'
 
 $bcPage = ($page !== 'index') ? $page : '';
 // we do not show view 'blog/template' ('template.php' is the view through which we funnel all blogs)
@@ -341,7 +271,7 @@ $bcPage = ($page !== 'template') ? ($bcPage !== '' ? $page : '') : $param1;
 $location = ($bcPage !== '') ? $bcViewsDir . ' / ' . $bcPage : $bcViewsDir;
 $toolTip[1] = 'your are currently on page: ' . $location;
 
-/**
+/*
  * generate the navbar html
  */
 $org = config\Config::ORGNAME;
@@ -377,10 +307,10 @@ echo $container;
 
 echo $scrollToTopButton; // automatically appears on all pages with content exceeding screen height
 
-/**
-* check if user was redirected due to insufficient access privileges:
-* - access_denied (e.g. a guest trying to enter an admin or editor area)
-*/
+/*
+ * check if user was redirected due to insufficient access privileges:
+ * - access_denied (e.g. a guest trying to enter an admin or editor area)
+ */
 $redirect = $session->get('access_denied');
 if ($redirect) {
 $redirectLocation = explode('_', $redirect);

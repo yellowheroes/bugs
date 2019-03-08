@@ -6,15 +6,17 @@ use yellowheroes\bugs\system\config as config;
 use yellowheroes\bugs\system\mvc\models as models;
 
 //paths to links - used in hrefs
-$root = (new config\Config(true))->path['root'];
 $crud = (new config\Config(true))->path['crud'];
 $create = (new config\Config(true))->path['create'];
 $read = (new config\Config(true))->path['read'];
 $update = (new config\Config(true))->path['update'];
 $delete = (new config\Config(true))->path['delete'];
 
-//get bug-report data from table 'jimmy' in database bugs
-$dbTable = config\Config::TBL_JIMMY;
+/*
+ * retrieve bug-report data from your project's bug-table
+ * define your bug-database and bug-table in system/config/Config.php
+ */
+$dbTable = config\Config::TBL_BUGS;
 $selectData = (new models\CrudModel())->selectRecord($dbTable, $id);
 
 echo "<div class='row'>";
@@ -43,6 +45,7 @@ echo '</div>';
 echo '<br />';
 echo "<hr style='border: 1px solid #FFC000'>";
 echo '<br />';
+/* use margin-bottom 100px to prevent links disappearing behind footer */
 echo "<div class='row' style='margin-bottom: 100px;'>";
 echo "<div class='col'>" . "<a href='" . $update . "/" . $selectData['id'] . "'>Update bug report</a>" . '</div>';
 echo "<div class='col'>" . "<a href='" . $delete . "/" . $selectData['id'] . "'>Delete bug report</a>" . '</div>';

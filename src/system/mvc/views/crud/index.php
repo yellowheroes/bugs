@@ -11,11 +11,11 @@ $read = (new config\Config(true))->path['read'];
 $update = (new config\Config(true))->path['update'];
 $delete = (new config\Config(true))->path['delete'];
 
-$link_logout = $logout;
-$show_logout = 'logout';
-
-//get data from table 'jimmy' in database
-$dbTable = config\Config::TBL_JIMMY;
+/*
+ * retrieve all bug-report data from your project's bug-table
+ * define your bug-database and bug-table in system/config/Config.php
+ */
+$dbTable = config\Config::TBL_BUGS;
 $selectData = (new models\CrudModel())->selectAll($dbTable);
 $msg = <<<HEREDOC
 Bug Monitor <br />
