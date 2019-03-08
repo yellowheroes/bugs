@@ -17,6 +17,7 @@ if (isset($_POST['submit'])) {
 
 /* ['type', 'name', 'id', 'value', 'placeholder', 'label', options[]] */
 $inputFields = [
+    ['select', 'severity', 'severity', '', '', 'bug report severity', ['cosmetic', 'minor', 'major', 'critical', 'suggestion']],
     ['text', 'title', 'title', "", 'enter title', 'bug report title', ['required']],
     ['textarea', 'description', 'description', "", 'description', 'description', ['required']]
 ];

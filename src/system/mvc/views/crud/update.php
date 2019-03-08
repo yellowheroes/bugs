@@ -24,10 +24,13 @@ if (isset($_POST['submit'])) {
     exit(); // terminate script update.php
 }
 
+echo $bootWrap->alert('Update Bug Report', 'primary', false);
+
 /* ['type', 'name', 'id', 'value', 'placeholder', 'label', options[]] */
 $inputFields = [
-    ['select', 'status', 'status', $selectData['status'], '', 'bug report status', [$selectData['status'], 'new', 'accepted', 'in progress', 'awaiting validation', 'fixed']],
-    ['text', 'title', 'title', $selectData['title'], '', 'bug report title', ['required']],
+    ['select', 'status', 'status', $selectData['status'], '', 'status', [$selectData['status'], 'new', 'accepted', 'in progress', 'awaiting validation', 'fixed']],
+    ['select', 'severity', 'severity', $selectData['severity'], '', 'severity', [$selectData['severity'], 'cosmetic', 'minor', 'major', 'critical', 'suggestion']],
+    ['text', 'title', 'title', $selectData['title'], '', 'title', ['required']],
     ['textarea', 'description', 'description', $selectData['description'], '', 'description', ['required']]
 ];
 $form = $bootWrap->form($inputFields, 'Save bug report');

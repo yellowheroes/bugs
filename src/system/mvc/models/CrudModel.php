@@ -36,42 +36,18 @@ class CrudModel extends libs\CoreModel
 
     public function insertRecord($dbTable=null)
     {
-        // keep track post values
+        // $_POST array containing user input
+        $severity = $_POST['severity'];
         $title = $_POST['title'];
         $description = $_POST['description'];
 
         // validate input
         $valid = true;
-        if (empty($title)) {
-            $titleError = 'Please enter user name';
+        if (empty($severity)) {
+            $severityError = 'Please enter severity';
             $valid = false;
         }
 
-        if (empty($description)) {
-            $descriptionError = 'Please enter password';
-            $valid = false;
-        }
-        // insert row
-        if (is_object($this->pdo) && $valid === true) {
-            $status = "new";
-            $sql = "INSERT INTO " . $dbTable .
-                    " (`id`, `status`, `title`, `description`)
-                    VALUES (NULL, :status, :title, :description)";
-            $insert = (new libs\DbQuery())->doInsert($this->pdo, $sql, $status, $title, $description);
-            $this->pdo = null; // kill database connection
-            return;
-        }
-    }
-
-    public function updateRecord($dbTable, $id)
-    {
-        // keep track post values
-        $title = $_POST['title'];
-        $description = $_POST['description'];
-        $status = $_POST['status'];
-
-        // validate input
-        $valid = true;
         if (empty($title)) {
             $titleError = 'Please enter user title';
             $valid = false;
@@ -82,15 +58,52 @@ class CrudModel extends libs\CoreModel
             $valid = false;
         }
 
+        // insert row
+        if (is_object($this->pdo) && $valid === true) {
+            $status = "new"; // status is always 'new' for a new bug report insert
+            $sql = "INSERT INTO " . $dbTable .
+                    " (`id`, `status`, `severity`, `title`, `description`)
+                    VALUES (NULL, :status, :severity, :title, :description)";
+            $insert = (new libs\DbQuery())->doInsert($this->pdo, $sql, $status, $severity, $title, $description);
+            $this->pdo = null; // kill database connection
+            return;
+        }
+    }
+
+    public function updateRecord($dbTable, $id)
+    {
+        // $_POST array containing user input
+        $status = $_POST['status'];
+        $severity = $_POST['severity'];
+        $title = $_POST['title'];
+        $description = $_POST['description'];
+
+        // validate input
+        $valid = true;
         if (empty($status)) {
             $statusError = 'Please enter status';
             $valid = false;
         }
 
+        if (empty($severity)) {
+            $severityError = 'Please enter severity';
+            $valid = false;
+        }
+
+        if (empty($title)) {
+            $titleError = 'Please enter user title';
+            $valid = false;
+        }
+
+        if (empty($description)) {
+            $descriptionError = 'Please enter description';
+            $valid = false;
+        }
+
         // update row
         if (is_object($this->pdo) && $valid === true) {
-            $sql = "UPDATE " . $dbTable . " SET `status` = :status, `title` = :title, `description` = :description WHERE `id` = :id";
-            $update = (new libs\DbQuery())->doUpdate($this->pdo, $sql, $id, $status, $title, $description);
+            $sql = "UPDATE " . $dbTable . " SET `status` = :status, `severity` = :severity, `title` = :title, `description` = :description WHERE `id` = :id";
+            $update = (new libs\DbQuery())->doUpdate($this->pdo, $sql, $id, $status, $severity, $title, $description);
             $this->pdo = null;
             return;
         }

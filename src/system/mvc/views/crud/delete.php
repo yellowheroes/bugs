@@ -16,21 +16,26 @@ if (isset($_POST['submit'])) {
 }
 $id = $selectData['id'];
 $status = $selectData['status'];
-$title = $selectData['title'];
-$description = nl2br($selectData['description']);
+$severity = $selectData['severity'];
+$title = ucfirst($selectData['title']);
+$description = nl2br($selectData['description']); // use nl2br to render carriage returns
 /*
  * create a form to allow user to confirm or abort bug-report deletion
  * $crud is the path back to bug-monitor main view (used when user aborts deletion)
  */
 $form = $bootWrap->form(null, 'Delete bug report', 'POST', "#", "formId", $crud, "Oops, no thanks");
+$warningMsg = "Do you really want to delete the following bug report?";
+$warning = $bootWrap->alert($warningMsg, 'warning', false);
 $msg = <<<HEREDOC
-Do you really want to delete the following bug report:<br /><br />
+$warning <br />
 bug id: #$id <br />
-status: $status <br /><br />
-title: $title <br /><br />
-description:<br />$description <br />
+status: $status <br />
+severity: $severity <br /><br />
+<hr>
+<p class="font-weight-bold">$title</p>
+<p>$description</p> <br />
 $form
 <br /><br />
 HEREDOC;
 
-echo $bootWrap->alert($msg, 'warning', false);
+echo $bootWrap->alert($msg, 'primary', false);

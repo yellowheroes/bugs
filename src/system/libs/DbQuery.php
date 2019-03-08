@@ -14,16 +14,20 @@ use \PDO;
 class DbQuery
 {
     /**
-     * @doInsert
-     * example - a valid INSERT query:
-     * INSERT INTO `jimmy` (`id`, `new`, `accepted`, `in progress`, `awaiting validation`, `fixed`) VALUES (NULL, 'some bug report', '', '', '', '');
+     * @param        $connection    : the PDO connection object
+     * @param        $sql           : the SQL query
+     * @param string $status        : the bug-report status - new, accepted, in progress, awaiting validation, or fixed
+     * @param string $severity      : the bug-report severity - cosmetic, minor, major, critical, or suggestion
+     * @param string $title         : the bug-report title (describing the bug in a few words)
+     * @param string $description   : the bug-report description (detailed)
      */
-    public function doInsert($connection, $sql, $status = "", $title = "", $description = "")
+    public function doInsert($connection, $sql, $status = "", $severity = "", $title = "", $description = "")
     {
         if (is_object($connection)) {
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt = $connection->prepare($sql);
             $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':severity', $severity);
             $stmt->bindParam(':title', $title);
             $stmt->bindValue(':description', $description);
 
@@ -35,20 +39,26 @@ class DbQuery
     }
 
     /**
-     * @doUpdate (normally happens on reference 'id' in database, i.e. WHERE 'id' = :param1)
-     *
+     * @param        $connection
+     * @param        $sql
+     * @param string $id
+     * @param string $status
+     * @param string $severity
+     * @param string $title
+     * @param string $description
      */
-    public function doUpdate($connection, $sql, $id = "", $status = "", $title = "", $description = "")
+    public function doUpdate($connection, $sql, $id = "", $status = "", $severity = "", $title = "", $description = "")
     {
         if (is_object($connection)) {
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             // prepare sql and bind parameters
-            // use backticks ` when referencing a column heading with spaces in MySQL table, e.g. first <space> name, or last <space> name
+            // use backticks ` when referencing a column heading containing spaces, e.g. first <space> name, or last <space> name
             $stmt = $connection->prepare($sql);
             $stmt->bindParam(':id', $id); // id
             $stmt->bindParam(':status', $status); // status
+            $stmt->bindParam(':severity', $severity); // severity
             $stmt->bindParam(':title', $title); // title
-            $stmt->bindValue(':description', $description); // accepted
+            $stmt->bindValue(':description', $description); // description
             // update a row
             $stmt->execute();
             $connection = null;

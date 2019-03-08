@@ -298,8 +298,8 @@ $logStatus = $session->get('log-status'); // returns array with 3 elements: BOOL
  * a divider (grey horizontal ruler) is inserted with ''=>'' as $key=>$value (see below)
  */
 $guest = ['home' => $index, 'contact' => $contact, 'login' => $login]; // guest only has access to 'shared' blog
-$editor = ['home' => $index, 'crud' => $crud, 'contact' => $contact, 'logout' => $logout];
-$admin = ['home' => $index, 'crud' => $crud, 'contact' => $contact,
+$editor = ['home' => $index, 'bugs' => $crud, 'contact' => $contact, 'logout' => $logout];
+$admin = ['home' => $index, 'bugs' => $crud, 'contact' => $contact,
         'admin' => ['register new user' => $register,
                     'remove existing user' => $deregister, 'hr1' => '',
                     'create new blog' => $createblog,
@@ -332,7 +332,8 @@ if ($logStatus['loggedin']) {
  * we can retrieve $viewsDir and $page here as it is set as first argument in each controller invoking
  * $this->view->render($viewsDir, $page, $id);
  */
-$bcViewsDir = ($viewsDir !== 'index') ? $viewsDir : 'home'; // because we call index 'home'
+$bcViewsDir = ($viewsDir !== 'index') ? (($viewsDir !== 'crud') ? $viewsDir : 'bugs') : 'home'; // because we call index 'home' and crud 'bug monitor'
+
 $bcPage = ($page !== 'index') ? $page : '';
 // we do not show view 'blog/template' ('template.php' is the view through which we funnel all blogs)
 // but show actual blog-name ($param1 from CoreView::render()). 
