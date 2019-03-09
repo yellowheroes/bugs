@@ -46,9 +46,13 @@ echo "</div>";
 /* content */
 foreach ($selectData as $row) {
     echo "<div class='row'>";
+            $status = $row['status'];
+            $severity = $row['severity'];
+            $statusColor = statusColor($status); // get the proper text-color for each bug report's status
+            $severityColor = severityColor($severity); // get the proper text-color for each bug report's severity
             echo '<div class="col-1" style="border: 1px solid #FFC000;">' . $row['id'] . '</div>';
-            echo '<div class="col-2" style="border: 1px solid #FFC000;">' . $row['status'] . '</div>';
-            echo '<div class="col-2" style="border: 1px solid #FFC000;">' . $row['severity'] . '</div>';
+            echo "<div class='col-2 " . $statusColor . "' style='border: 1px solid #FFC000;'>" . $row['status'] . '</div>';
+            echo "<div class='col-2 " . $severityColor . "' style='border: 1px solid #FFC000;'>" . $row['severity'] . '</div>';
             echo '<div class="col-4" style="border: 1px solid #FFC000;">' . $row['title'] . '</div>';
 
             echo '<div class="col" style="border: 1px solid #FFC000;">' . "<a href='" . $read . "/" . $row['id'] . "'>Read</a>" . '</div>';
@@ -57,4 +61,52 @@ foreach ($selectData as $row) {
     echo '</div>';
 }
 /* end content */
+
+function statusColor($status = null)
+{
+    $textColor = "";
+
+    switch($status) {
+        case "new":
+            $textColor = "text-danger";
+            break;
+        case "accepted":
+            $textColor = ""; // default (clear grey) font color
+            break;
+        case "in progress":
+            $textColor = "text-secondary";
+            break;
+        case "awaiting validation":
+            $textColor = "text-info";
+            break;
+        case "fixed":
+            $textColor = "text-success";
+            break;
+    }
+    return $textColor;
+}
+
+function severityColor($severity = null)
+{
+    $textColor = "";
+
+    switch($severity) {
+        case "cosmetic":
+            $textColor = "text-secondary";
+            break;
+        case "minor":
+            $textColor = "text-info";
+            break;
+        case "major":
+            $textColor = "text-warning";
+            break;
+        case "critical":
+            $textColor = "text-danger";
+            break;
+        case "suggestion":
+            $textColor = "";// default (clear grey) font color
+            break;
+    }
+    return $textColor;
+}
 ?>
