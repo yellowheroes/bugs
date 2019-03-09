@@ -43,6 +43,10 @@ $logout = $config->path['logout'];
  * the CRUD functionality for bugs management
  */
 $crud = $config->path['crud'];
+$create = $config->path['create'];
+$read = $config->path['read'];
+$update = $config->path['update'];
+$delete = $config->path['delete'];
 
 $bootSwatchTheme = config\Config::BOOTSWATCH_THEME;
 $bootSwatchCss = "https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/" . $bootSwatchTheme . "/bootstrap.min.css";

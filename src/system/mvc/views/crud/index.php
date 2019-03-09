@@ -4,13 +4,6 @@ namespace yellowheroes\bugs\system\mvc\views;
 use yellowheroes\bugs\system\config as config;
 use yellowheroes\bugs\system\mvc\models as models;
 
-//paths to links - used in hrefs
-$crud = (new config\Config(true))->path['crud'];
-$create = (new config\Config(true))->path['create'];
-$read = (new config\Config(true))->path['read'];
-$update = (new config\Config(true))->path['update'];
-$delete = (new config\Config(true))->path['delete'];
-
 /*
  * retrieve all bug-report data from your project's bug-table
  * define your bug-database and bug-table in system/config/Config.php
