@@ -69,18 +69,28 @@ $styleSheets = [$fontAwesomeCss, $googleFontsCss, $stickyFooter, $bootSwatchCss,
 
 /*
  * Javascript / jQuery (plugins)
- * - Prism: syntax highlighting (should change to higlight.js)
+ * - Highlightjs: syntax highlighting
  * - Bootstrap tooltips
  * - Bootstrap dropdowns
  */
 
+/* we prefer Highlight.js over Prism */
 $syntaxHighlight = <<<HEREDOC
-<!-- START - Use Prism for syntax higlighting code in our repository -->
+<!-- START - Use Prism for syntax higlighting -->
         <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.7.1/dist/clipboard.min.js"></script>
         <script src="$javascript/prism.js"></script>
         <link rel="stylesheet" type="text/css" href="$css/prism.css">
-        <!-- STOP - Use Prism for syntax higlighting code in our repository -->\n
+        <!-- STOP - Use Prism for syntax higlighting -->\n
 HEREDOC;
+
+$highlightJs = <<<HEREDOC
+<!-- START - Use Highlight.js for syntax higlighting -->
+<link rel="stylesheet" href="$css/highlightjs_styles/atom_one_dark.css">
+<script src="$javascript/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- STOP - Use Highlight.js for syntax higlighting -->\n
+HEREDOC;
+
 
 /*
  * enable Bootstrap tooltips
@@ -186,7 +196,7 @@ HEREDOC;
  * generate the html <head> </head> block
  */
 $bootWrap = new libs\BootWrap();
-$setJs = $bootWrap->setJs([$syntaxHighlight, $toolTips, $dropDowns, $anchors, $scrollToTop]);
+$setJs = $bootWrap->setJs([$highlightJs, $toolTips, $dropDowns, $anchors, $scrollToTop]);
 $setOther = $bootWrap->setOther($favicon);
 $tabTitle = config\Config::ORGNAME;
 /*
