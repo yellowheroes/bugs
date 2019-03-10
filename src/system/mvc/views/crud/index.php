@@ -23,6 +23,24 @@ echo "<div class='col' style='margin-left: -15px;'>";
 echo $bootWrap->alert($msg, 'primary', false);
 echo "</div>";
 echo "</div>";
+
+/* tooltips */
+$statusToolTip = <<<HEREDOC
+The bug status shows where a bug lives in its lifecycle:<br />
+<strong>new</strong> (reported),<br />
+<strong>accepted</strong> (the issue can be reproduced),<br />
+<strong>in progress </strong>(someone is working on the issue),<br />
+<strong>awaiting validation </strong>(a solution is filed for approval)<br />
+<strong>fixed </strong>(the solution is approved and incorporated in the code base)
+HEREDOC;
+$severityToolTip = <<<HEREDOC
+Depending on how serious the bug is, this indicator ranges from:<br />
+<strong>suggestion </strong>(a new feature, some improvement),<br />
+<strong>cosmetic </strong>(e.g. UI enhancements),<br />
+<strong>minor </strong>(the bug affects a minor feature of the app),<br />
+<strong>major </strong>(the bug affects a major feature of the app)<br />
+<strong>critical </strong>(the bug crashes the app, or causes loss of data)
+HEREDOC;
 ?>
 <!-- same here, adjust -15px to align with the bug monitor table -->
 <div class="row">
@@ -34,9 +52,10 @@ echo "</div>";
 <!-- header -->
 <div class="row"> <!-- start header row -->
     <div class="col-1 bg-primary">ID</div>
-    <div class="col-2 bg-primary text-center">Status</div>
-    <div class="col-2 bg-primary text-center">Severity</div>
-    <div class="col-4 bg-primary text-center">Title</div>
+    <div class="col-1 bg-primary">Created</div>
+    <div class="col-2 bg-primary text-center" data-toggle="tooltip" data-html="true" data-placement="top" title="<?php echo $statusToolTip; ?>">Status</div>
+    <div class="col-2 bg-primary text-center" data-toggle="tooltip" data-html="true" data-placement="top" title="<?php echo $severityToolTip; ?>">Severity</div>
+    <div class="col-3 bg-primary text-center">Title</div>
     <div class="col bg-primary"></div> <!-- we need three empty col's to align the header with the content -->
     <div class="col bg-primary"></div> <!-- we need three empty col's to align the header with the content -->
     <div class="col bg-primary"></div> <!-- we need three empty col's to align the header with the content -->
@@ -46,14 +65,16 @@ echo "</div>";
 /* content */
 foreach ($selectData as $row) {
     echo "<div class='row'>";
+            $created = date('Y-m-d', strtotime($row['created'])); // only show Y-m-d, not time
             $status = $row['status'];
             $severity = $row['severity'];
             $statusColor = statusColor($status); // get the proper text-color for each bug report's status
             $severityColor = severityColor($severity); // get the proper text-color for each bug report's severity
             echo '<div class="col-1" style="border: 1px solid #FFC000;">' . $row['id'] . '</div>';
-            echo "<div class='col-2 text-center " . $statusColor . "' style='border: 1px solid #FFC000;'>" . $row['status'] . '</div>';
-            echo "<div class='col-2 text-center " . $severityColor . "' style='border: 1px solid #FFC000;'>" . $row['severity'] . '</div>';
-            echo '<div class="col-4" style="border: 1px solid #FFC000;">' . $row['title'] . '</div>';
+            echo '<div class="col-1 text-center" style="border: 1px solid #FFC000;">' . $created . '</div>';
+            echo "<div class='col-2 text-center " . $statusColor . "' style='border: 1px solid #FFC000;'>" . $status . '</div>';
+            echo "<div class='col-2 text-center " . $severityColor . "' style='border: 1px solid #FFC000;'>" . $severity . '</div>';
+            echo '<div class="col-3 text-white" style="border: 1px solid #FFC000;">' . $row['title'] . '</div>';
 
             echo '<div class="col text-center" style="border: 1px solid #FFC000;">' . "<a href='" . $read . "/" . $row['id'] . "'>Read</a>" . '</div>';
             echo '<div class="col text-center" style="border: 1px solid #FFC000;">' . "<a href='" . $update . "/" . $row['id'] . "'>Update</a>" . '</div>';
@@ -92,7 +113,7 @@ function severityColor($severity = null)
 
     switch($severity) {
         case "cosmetic":
-            $textColor = "text-secondary";
+            $textColor = ""; // default (clear grey) font color
             break;
         case "minor":
             $textColor = "text-info";
@@ -104,7 +125,7 @@ function severityColor($severity = null)
             $textColor = "text-danger";
             break;
         case "suggestion":
-            $textColor = "";// default (clear grey) font color
+            $textColor = "text-secondary";
             break;
     }
     return $textColor;
