@@ -51,13 +51,13 @@ foreach ($selectData as $row) {
             $statusColor = statusColor($status); // get the proper text-color for each bug report's status
             $severityColor = severityColor($severity); // get the proper text-color for each bug report's severity
             echo '<div class="col-1" style="border: 1px solid #FFC000;">' . $row['id'] . '</div>';
-            echo "<div class='col-2 " . $statusColor . "' style='border: 1px solid #FFC000;'>" . $row['status'] . '</div>';
-            echo "<div class='col-2 " . $severityColor . "' style='border: 1px solid #FFC000;'>" . $row['severity'] . '</div>';
+            echo "<div class='col-2 text-center " . $statusColor . "' style='border: 1px solid #FFC000;'>" . $row['status'] . '</div>';
+            echo "<div class='col-2 text-center " . $severityColor . "' style='border: 1px solid #FFC000;'>" . $row['severity'] . '</div>';
             echo '<div class="col-4" style="border: 1px solid #FFC000;">' . $row['title'] . '</div>';
 
-            echo '<div class="col" style="border: 1px solid #FFC000;">' . "<a href='" . $read . "/" . $row['id'] . "'>Read</a>" . '</div>';
-            echo '<div class="col" style="border: 1px solid #FFC000;">' . "<a href='" . $update . "/" . $row['id'] . "'>Update</a>" . '</div>';
-            echo '<div class="col" style="border: 1px solid #FFC000;">' . "<a href='" . $delete . "/" . $row['id'] . "'>Delete</a>" . '</div>';
+            echo '<div class="col text-center" style="border: 1px solid #FFC000;">' . "<a href='" . $read . "/" . $row['id'] . "'>Read</a>" . '</div>';
+            echo '<div class="col text-center" style="border: 1px solid #FFC000;">' . "<a href='" . $update . "/" . $row['id'] . "'>Update</a>" . '</div>';
+            echo '<div class="col text-center" style="border: 1px solid #FFC000;">' . "<a href='" . $delete . "/" . $row['id'] . "'>Delete</a>" . '</div>';
     echo '</div>';
 }
 /* end content */
